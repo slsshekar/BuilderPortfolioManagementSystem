@@ -1,21 +1,22 @@
-package org.zeta.model;
+package com.zeta.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task {
+public class Project {
     private int id;
     private String name;
     private String description;
-    private List<Builder> builderList = new ArrayList<>();
+    private List<Task> taskList = new ArrayList<>();
     private List<Manager> managerList = new ArrayList<>();
+    private int clientId;
+    private STATUS status;
     private LocalDate startDate;
     private LocalDate endDate;
-    private STATUS status;
 
-    public int getId() {
-        return id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -34,12 +35,12 @@ public class Task {
         this.description = description;
     }
 
-    public List<Builder> getBuilderList() {
-        return builderList;
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setBuilderList(List<Builder> builderList) {
-        this.builderList = builderList;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
     public List<Manager> getManagerList() {
@@ -48,6 +49,14 @@ public class Task {
 
     public void setManagerList(List<Manager> managerList) {
         this.managerList = managerList;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public LocalDate getStartDate() {
@@ -73,4 +82,6 @@ public class Task {
     public void setStatus(STATUS status) {
         this.status = status;
     }
+
+
 }

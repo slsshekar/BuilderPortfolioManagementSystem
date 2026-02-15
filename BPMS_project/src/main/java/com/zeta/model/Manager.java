@@ -1,10 +1,10 @@
-package org.zeta.model;
+package com.zeta.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends User {
-    private List<Project> projectList=new ArrayList<>();
+public class Manager{
+    private List<Project>projectList=new ArrayList<>();
 
     public List<Project> getProjectList() {
         return projectList;
