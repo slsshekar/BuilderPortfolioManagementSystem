@@ -13,11 +13,6 @@ public class LoginTests {
 
     private final Login login = new Login();
 
-    @BeforeAll
-    static void setUp() {
-        Register register = new Register();
-    }
-
     @Test
     void testLoginWithValidUser() throws UserNotFoundException, InvalidPasswordException {
         ROLE role = login.login("abc", "1234");
