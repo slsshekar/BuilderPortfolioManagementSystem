@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Login {
 
-    private static final String FILE_NAME = "users.json";
+    private static final String FILE_NAME = "database/users.json";
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private static Map<String, User> loadFromFile() {
