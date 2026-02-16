@@ -1,0 +1,19 @@
+package com.zeta.Exceptions.LoginException;
+
+public class InvalidPasswordException extends Exception {
+    public InvalidPasswordException(String message) {
+        super(message);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
