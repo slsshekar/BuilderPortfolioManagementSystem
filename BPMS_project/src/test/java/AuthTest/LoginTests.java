@@ -2,8 +2,11 @@ package AuthTest;
 
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
+import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Login;
+import com.zeta.service.AuthService.Register;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,10 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoginTests {
 
     private final Login login = new Login();
-
+    @BeforeAll
+    static void init() throws RoleMismatchException {
+        Register register=new Register();
+        register.register("LoginTest-1","1234",ROLE.MANAGER);
+    }
     @Test
     void testLoginWithValidUser() throws UserNotFoundException, InvalidPasswordException {
-        ROLE role = login.login("abc", "1234");
+        ROLE role = login.login("LoginTest-1", "1234");
         assertEquals(ROLE.MANAGER, role);
     }
 
@@ -28,7 +35,7 @@ public class LoginTests {
     @Test
     void testLoginWithWrongPassword() {
         assertThrows(InvalidPasswordException.class, () -> {
-            login.login("abc", "wrongPassword");
+            login.login("LoginTest-1", "wrongPassword");
         });
     }
 

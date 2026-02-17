@@ -36,7 +36,10 @@ public class ProjectService {
         }
         project.setClientName(clientName);
         projectHashMap.put(project.getName(),project);
+        Client client=(Client)userMap.get(clientName);
+        client.getProjectList().add(project.getName());
         FileService.saveToFile(projectHashMap,FILE_NAME,mapper);
+        FileService.saveToFile(userMap,"database/users.json",mapper);
         return projectHashMap.containsKey(project.getName());
 
     }
