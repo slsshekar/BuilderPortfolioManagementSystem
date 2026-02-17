@@ -1,3 +1,5 @@
+package AuthTest;
+
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.ROLE;

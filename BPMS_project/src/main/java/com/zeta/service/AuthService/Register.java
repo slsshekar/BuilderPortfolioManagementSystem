@@ -5,6 +5,7 @@ import com.zeta.model.ROLE;
 import com.zeta.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zeta.service.FileService.FileService;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,34 +20,6 @@ public class Register {
     private static final ObjectMapper mapper = new ObjectMapper();
 
 
-    private static void loadFromFile() {
-        try {
-            File file = new File(FILE_NAME);
-
-            if (file.exists() && file.length() > 0) {
-                userList = mapper.readValue(
-                        file,
-                        new TypeReference<Map<String, User>>() {}
-                );
-            } else {
-                userList = new HashMap<>();
-            }
-
-        } catch (IOException e) {
-            System.out.println("Error loading data: " + e.getMessage());
-            userList = new HashMap<>();
-        }
-    }
-
-    private static void saveToFile() {
-        try {
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(FILE_NAME), userList);
-
-        } catch (IOException e) {
-            System.out.println("Error saving data: " + e.getMessage());
-        }
-    }
 
     private void validateInput(String input, String fieldName) {
         if (input == null || input.isBlank()) {
@@ -56,7 +29,7 @@ public class Register {
 
     public boolean register(String username, String password, ROLE role) {
 
-        loadFromFile();
+        userList=FileService.loadFromFile((HashMap) userList,FILE_NAME,mapper);
 
         validateInput(username, "Username");
         validateInput(password, "Password");
@@ -72,7 +45,7 @@ public class Register {
         Client client = new Client(username, password);
         userList.put(username, client);
 
-        saveToFile();
+        FileService.saveToFile(userList,FILE_NAME,mapper);
 
         System.out.println("User registered successfully: " + username);
         return true;
