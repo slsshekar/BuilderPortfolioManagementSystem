@@ -26,6 +26,7 @@ public class RegisterTest {
     @Test
     void registerValidUser() throws RoleMismatchException {
         boolean result = register.register("raman1", "1234", ROLE.BUILDER);
+
         assertTrue(result);
     }
 

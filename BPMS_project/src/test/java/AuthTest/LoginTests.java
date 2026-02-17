@@ -15,7 +15,7 @@ public class LoginTests {
 
     private final Login login = new Login();
     @BeforeAll
-    static void init() throws RoleMismatchException {
+    static void init() throws RoleMismatchException, RoleMismatchException {
         Register register=new Register();
         register.register("LoginTest-1","1234",ROLE.MANAGER);
     }

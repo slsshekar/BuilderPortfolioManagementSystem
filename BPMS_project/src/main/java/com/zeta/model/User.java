@@ -1,6 +1,5 @@
 package com.zeta.model;
 
-import javax.print.DocFlavor;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(
@@ -60,7 +59,5 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 
 }
