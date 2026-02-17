@@ -1,7 +1,9 @@
 package com.zeta.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Client extends User{
     public Client(){
@@ -12,13 +14,13 @@ public class Client extends User{
         this.setPassword(password);
         this.setRole(role);
     }
-    private List<Project> projectList=new ArrayList<>();
+    private Set<String> projectList=new HashSet<>();
 
-    public List<Project> getProjectList() {
+    public Set<String> getProjectList() {
         return projectList;
     }
 
-    public void setProjectList(List<Project> projectList) {
+    public void setProjectList(Set<String> projectList) {
         this.projectList = projectList;
     }
 }

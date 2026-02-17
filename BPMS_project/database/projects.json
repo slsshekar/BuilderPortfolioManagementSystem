@@ -3,9 +3,9 @@
     "name" : "tower-1",
     "description" : "five floors,near highway",
     "taskList" : [ ],
-    "managerList" : [ ],
+    "managerList" : [ "abc", "raman" ],
     "clientName" : "abc",
-    "status" : "NOT_APPROVED",
+    "status" : "UPCOMING",
     "startDate" : "2026-10-09",
     "endDate" : "2027-10-08",
     "id" : 5

@@ -14,13 +14,13 @@ public class Manager extends User{
         this.setPassword(password);
         this.setRole(role);
     }
-    private Set<Project> projectList=new HashSet<>();
+    private Set<String> projectList=new HashSet<>();
 
-    public Set<Project> getProjectList() {
+    public Set<String> getProjectList() {
         return projectList;
     }
 
-    public void setProjectList(Set<Project> projectList) {
+    public void setProjectList(Set<String> projectList) {
         this.projectList = projectList;
     }
 }

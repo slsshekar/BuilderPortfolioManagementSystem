@@ -4,7 +4,7 @@
     "name" : "abc",
     "password" : "1234",
     "role" : "MANAGER",
-    "projectList" : [ ]
+    "projectList" : [ "tower-1" ]
   },
   "raman1" : {
     "id" : 9,
@@ -18,6 +18,6 @@
     "name" : "raman",
     "password" : "123",
     "role" : "MANAGER",
-    "projectList" : [ ]
+    "projectList" : [ "tower-1" ]
   }
 }

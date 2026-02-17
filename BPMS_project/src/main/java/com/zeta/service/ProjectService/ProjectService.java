@@ -52,7 +52,7 @@ public class ProjectService {
         FileService.saveToFile(projectHashMap,FILE_NAME,mapper);
         return true;
     }
-    public void assignManager(String projectName, String managerName) throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
+    public boolean assignManager(String projectName, String managerName) throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
         projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
         userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
         Utility.validateInput(projectName, "project name");
@@ -61,31 +61,39 @@ public class ProjectService {
             throw new ProjectDoestNotExistException(projectName + " doesnt exist");
         }
         Project project=projectHashMap.get(projectName);
-        User manager;
+        Manager manager;
         if (!userMap.containsKey(managerName)) {
             throw new UserNotFoundException(managerName + " manager does not exist");
         } else {
-            manager = userMap.get(managerName);
-            if (manager.getRole() != ROLE.MANAGER) {
-                throw new RoleMismatchException(managerName + " is not a manager");
-            }
+            manager = (Manager) userMap.get(managerName);
         }
-        Set<String> list= project.getManagerList();
-        list.add(managerName);
-        project.setManagerList(list);
-//        manager.getManagerList
+        project.getManagerList().add(managerName);
+        manager.getProjectList().add(projectName);
         FileService.saveToFile(projectHashMap,FILE_NAME,mapper);
         FileService.saveToFile(userMap,"database/users.json",mapper);
+        return true;
 
+    }
+    public Set<String> getProjectsByClientName(String clientName) throws UserNotFoundException {
+        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
+        Client client;
+        Utility.validateInput(clientName,"client name");
+        if(!userMap.containsKey(clientName)){
+            throw new UserNotFoundException(clientName+" does not exist");
+        }
+        client=(Client) userMap.get(clientName);
+        return client.getProjectList();
 
     }
-    public List<Project> getProjectsByClientId(int clientId){
-        return new ArrayList<>();
+    public Set<String> getProjectsByManagerName(String managerName) throws UserNotFoundException {
+        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
+        Manager manager;
+        Utility.validateInput(managerName,"manager name");
+        if(!userMap.containsKey(managerName)){
+            throw new UserNotFoundException(managerName+" does not exist");
+        }
+        manager=(Manager) userMap.get(managerName);
+        return manager.getProjectList();
     }
-    public List<Project> getProjectsByManagerId(int managerId){
-        return new ArrayList<>();
-    }
-//    public Project getProjectById(int id){
-//        return new Project();
-//    }
+
 }
