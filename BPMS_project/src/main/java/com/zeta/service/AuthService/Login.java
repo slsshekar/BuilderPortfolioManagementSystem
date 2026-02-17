@@ -4,13 +4,9 @@ import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.ROLE;
 import com.zeta.model.User;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zeta.service.FileService.FileService;
 import com.zeta.service.utility.Utility;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

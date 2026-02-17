@@ -1,13 +1,13 @@
 {
-  "Testing" : {
-    "id" : 3,
-    "name" : "Testing",
-    "description" : "Sample description for Testing",
+  "Database Setup" : {
+    "id" : 1,
+    "name" : "Database Setup",
+    "description" : "Sample description for Database Setup",
     "projectId" : 100,
     "builderList" : [ ],
     "managerId" : 0,
     "startDate" : null,
     "endDate" : null,
-    "status" : "UPCOMING"
+    "status" : "IN_PROGRESS"
   }
 }

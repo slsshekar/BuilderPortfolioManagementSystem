@@ -2,13 +2,9 @@ package com.zeta.service.AuthService;
 
 import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.model.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.service.FileService.FileService;
 import com.zeta.service.utility.Utility;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
