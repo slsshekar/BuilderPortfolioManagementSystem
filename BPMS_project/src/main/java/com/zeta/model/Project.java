@@ -14,7 +14,14 @@ public class Project {
     private STATUS status;
     private LocalDate startDate;
     private LocalDate endDate;
-
+    Project(String name,String description,LocalDate startDate,LocalDate endDate){
+        this.name=name;
+        this.description=description;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        this.id=id++;
+        this.status=STATUS.NOT_APPROVED;
+    }
     public void setId(int id) {
         this.id = id;
     }
