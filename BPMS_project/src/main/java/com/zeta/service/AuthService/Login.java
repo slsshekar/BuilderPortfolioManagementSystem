@@ -1,4 +1,5 @@
 package com.zeta.service.AuthService;
+
 import com.zeta.service.FileService.FileService;
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
@@ -21,8 +22,7 @@ public class Login {
         Utility.validateInput(username, "Username");
         Utility.validateInput(password, "Password");
 
-        userList=FileService.loadFromFile(FILE_NAME,mapper, User.class);
-        System.out.println(userList);
+        userList = FileService.loadFromFile(FILE_NAME, mapper, User.class);
         if (!userList.containsKey(username)) {
             throw new UserNotFoundException("User not found: " + username);
         }

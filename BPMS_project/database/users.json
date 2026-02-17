@@ -1,23 +1,9 @@
 {
-  "abc" : {
-    "id" : 4,
-    "name" : "abc",
-    "password" : "1234",
-    "role" : "MANAGER",
-    "projectList" : [ ]
-  },
-  "raman1" : {
-    "id" : 9,
-    "name" : "raman1",
-    "password" : "1234",
-    "role" : "BUILDER",
-    "taskList" : [ ]
-  },
-  "raman" : {
-    "id" : 5,
-    "name" : "raman",
-    "password" : "123",
-    "role" : "MANAGER",
+  "cli1" : {
+    "id" : 1,
+    "name" : "cli1",
+    "password" : "cli1",
+    "role" : "CLIENT",
     "projectList" : [ ]
   }
 }
