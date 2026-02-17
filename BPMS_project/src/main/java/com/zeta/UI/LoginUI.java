@@ -26,6 +26,7 @@ public class LoginUI {
             switch (role) {
                 case CLIENT:
                     System.out.println("Welcome Client!");
+                    ClientUI.show(scanner, username);
                     break;
                 case BUILDER:
                     System.out.println("Welcome Builder!");

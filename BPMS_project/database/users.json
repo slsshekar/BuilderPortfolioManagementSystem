@@ -4,6 +4,6 @@
     "name" : "cli1",
     "password" : "cli1",
     "role" : "CLIENT",
-    "projectList" : [ ]
+    "projectList" : [ "pro1", "pro2" ]
   }
 }
