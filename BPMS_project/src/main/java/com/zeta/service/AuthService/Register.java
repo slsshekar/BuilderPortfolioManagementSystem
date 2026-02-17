@@ -1,10 +1,11 @@
 package com.zeta.service.AuthService;
 
-import com.zeta.model.ROLE;
-import com.zeta.model.User;
+import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
+import com.zeta.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.service.FileService.FileService;
+import com.zeta.service.utility.Utility;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,19 +20,12 @@ public class Register {
     private static final ObjectMapper mapper = new ObjectMapper();
 
 
+    public boolean register(String username, String password, ROLE role) throws RoleMismatchException {
 
-    private void validateInput(String input, String fieldName) {
-        if (input == null || input.isBlank()) {
-            throw new IllegalArgumentException(fieldName + " cannot be blank");
-        }
-    }
+        userList=FileService.loadFromFile(FILE_NAME,mapper, User.class);
 
-    public boolean register(String username, String password, ROLE role) {
-
-        userList=FileService.loadFromFile((HashMap) userList,FILE_NAME,mapper);
-
-        validateInput(username, "Username");
-        validateInput(password, "Password");
+        Utility.validateInput(username, "Username");
+        Utility.validateInput(password, "Password");
 
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
@@ -40,8 +34,13 @@ public class Register {
         if (userList.containsKey(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
+        User user = switch (role) {
+            case MANAGER -> new Manager(username, password, role);
+            case BUILDER -> new Builder(username, password, role);
+            case CLIENT -> new Client(username, password, role);
+            default -> throw new RoleMismatchException(role + " does not match any roles");
+        };
 
-        User user = new User(username, password, role);
         userList.put(username, user);
 
         FileService.saveToFile(userList,FILE_NAME,mapper);
