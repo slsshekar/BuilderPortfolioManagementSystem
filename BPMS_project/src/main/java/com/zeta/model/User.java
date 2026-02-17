@@ -1,8 +1,6 @@
 package com.zeta.model;
 
-import javax.print.DocFlavor;
-
-public class User {
+public abstract class User {
     private int id;
     private String name;
     private String password;
@@ -47,7 +45,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 
 }

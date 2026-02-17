@@ -8,14 +8,19 @@ public class Task {
     private int id;
     private String name;
     private String description;
+    private int projectId;
     private List<Builder> builderList = new ArrayList<>();
-    private List<Manager> managerList = new ArrayList<>();
+    private int managerId;
     private LocalDate startDate;
     private LocalDate endDate;
     private STATUS status;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,12 +47,20 @@ public class Task {
         this.builderList = builderList;
     }
 
-    public List<Manager> getManagerList() {
-        return managerList;
+    public int getManagerId() {
+        return managerId;
     }
 
-    public void setManagerList(List<Manager> managerList) {
-        this.managerList = managerList;
+    public void setManagerId(int managerId) {
+        this.managerId = managerId;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
     public LocalDate getStartDate() {

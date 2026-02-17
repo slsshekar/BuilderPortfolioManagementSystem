@@ -1,5 +1,6 @@
 package com.zeta.service.AuthService;
 
+import com.zeta.model.Client;
 import com.zeta.model.ROLE;
 import com.zeta.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -68,8 +69,8 @@ public class Register {
             throw new IllegalArgumentException("Username already exists");
         }
 
-        User user = new User(username, password, role);
-        userList.put(username, user);
+        Client client = new Client(username, password);
+        userList.put(username, client);
 
         saveToFile();
 
