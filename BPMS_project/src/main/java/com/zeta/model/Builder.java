@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Builder extends User {
-    public Builder() {
-        super();
-        setRole(ROLE.BUILDER);
-    }
+    public Builder(){
 
-    public Builder(String name, String password) {
-        super(name, password, ROLE.BUILDER);
+    }
+    public Builder(String username, String password, ROLE role){
+        this.setName(username);
+        this.setPassword(password);
+        this.setRole(role);
     }
     private List<Task> taskList=new ArrayList<>();
 

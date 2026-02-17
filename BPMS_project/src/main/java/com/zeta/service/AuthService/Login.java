@@ -7,6 +7,7 @@ import com.zeta.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.service.FileService.FileService;
+import com.zeta.service.utility.Utility;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,18 +19,13 @@ public class Login {
     private static final String FILE_NAME = "database/users.json";
     private static final ObjectMapper mapper = new ObjectMapper();
     private static Map<String, User> userList = new HashMap<>();
-    private void validateInput(String input, String fieldName) {
-        if (input == null || input.isBlank()) {
-            throw new IllegalArgumentException(fieldName + " cannot be blank");
-        }
-    }
 
     public ROLE login(String username, String password) throws UserNotFoundException, InvalidPasswordException {
 
-        validateInput(username, "Username");
-        validateInput(password, "Password");
+        Utility.validateInput(username, "Username");
+        Utility.validateInput(password, "Password");
 
-        userList=FileService.loadFromFile(userList,FILE_NAME,mapper);
+        userList=FileService.loadFromFile(FILE_NAME,mapper, User.class);
         System.out.println(userList);
         if (!userList.containsKey(username)) {
             throw new UserNotFoundException("User not found: " + username);

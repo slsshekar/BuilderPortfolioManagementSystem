@@ -1,8 +1,6 @@
 package com.zeta.service.FileService;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zeta.model.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,41 +9,42 @@ import java.util.Map;
 
 public class FileService {
 
-    public static Map<String, User> loadFromFile(
-            Map<String, User> objectsList,
-            String FILE_NAME,
-            ObjectMapper mapper) {
+    // LOAD MAP<String, T>
+    public static <T> Map<String, T> loadFromFile(
+            String fileName,
+            ObjectMapper mapper,
+            Class<T> clazz) {
 
         try {
-            File file = new File(FILE_NAME);
+            File file = new File(fileName);
 
-            if (file.exists() && file.length() > 0) {
-
-                objectsList = mapper.readValue(
-                        file,
-                        new TypeReference<Map<String, User>>() {}
-                );
-
-            } else {
-                objectsList = new HashMap<>();
+            // if file not present or empty → return empty map
+            if (!file.exists() || file.length() == 0) {
+                return new HashMap<>();
             }
+
+            return mapper.readValue(
+                    file,
+                    mapper.getTypeFactory()
+                            .constructMapType(HashMap.class, String.class, clazz)
+            );
 
         } catch (IOException e) {
             System.out.println("Error loading data: " + e.getMessage());
-            objectsList = new HashMap<>();
+            return new HashMap<>();
         }
-
-        return objectsList;
     }
 
-    public static void saveToFile(
-            Map<String, User> objectsList,
-            String FILE_NAME,
+
+    // SAVE MAP<String, T>
+    public static <T> void saveToFile(
+            Map<String, T> objectsList,
+            String fileName,
             ObjectMapper mapper) {
 
         try {
             mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(FILE_NAME), objectsList);
+                    .writeValue(new File(fileName), objectsList);
 
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());

@@ -1,31 +1,9 @@
 {
-  "Task X" : {
-    "id" : 8,
-    "name" : "Task X",
-    "description" : "Sample description for Task X",
-    "projectId" : 400,
-    "builderList" : [ ],
-    "managerId" : 0,
-    "startDate" : null,
-    "endDate" : null,
-    "status" : "UPCOMING"
-  },
-  "Task Y" : {
-    "id" : 9,
-    "name" : "Task Y",
-    "description" : "Sample description for Task Y",
-    "projectId" : 400,
-    "builderList" : [ ],
-    "managerId" : 0,
-    "startDate" : null,
-    "endDate" : null,
-    "status" : "IN_PROGRESS"
-  },
-  "Task Z" : {
-    "id" : 10,
-    "name" : "Task Z",
-    "description" : "Sample description for Task Z",
-    "projectId" : 400,
+  "Testing" : {
+    "id" : 3,
+    "name" : "Testing",
+    "description" : "Sample description for Testing",
+    "projectId" : 100,
     "builderList" : [ ],
     "managerId" : 0,
     "startDate" : null,

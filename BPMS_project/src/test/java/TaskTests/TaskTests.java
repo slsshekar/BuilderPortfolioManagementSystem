@@ -1,3 +1,5 @@
+package TaskTests;
+
 import com.zeta.Exceptions.TaskException.InvalidTaskException;
 import com.zeta.Exceptions.TaskException.TaskAlreadyExistsException;
 import com.zeta.Exceptions.TaskException.TaskNotFoundException;
@@ -67,7 +69,7 @@ public class TaskTests {
         Task task = createSampleTask(1, "Design UI", 100, STATUS.UPCOMING);
         createTask.createTask(task);
 
-        Task duplicateTask = createSampleTask(1, "Another Task", 200, STATUS.IN_PROGRESS);
+        Task duplicateTask = createSampleTask(2, "Design UI", 200, STATUS.IN_PROGRESS);
         assertThrows(TaskAlreadyExistsException.class, () -> {
             createTask.createTask(duplicateTask);
         });

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends User{
-    public Client() {
-        super();
-        setRole(ROLE.CLIENT);
-    }
+    public Client(){
 
-    public Client(String name, String password) {
-        super(name, password, ROLE.CLIENT);
+    }
+    public Client(String username, String password, ROLE role){
+        this.setName(username);
+        this.setPassword(password);
+        this.setRole(role);
     }
     private List<Project> projectList=new ArrayList<>();
 

@@ -1,24 +1,26 @@
 package com.zeta.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Manager extends User{
-    public Manager() {
-        super();
-        setRole(ROLE.MANAGER);
-    }
+    Manager(){
 
-    public Manager(String name, String password) {
-        super(name, password, ROLE.MANAGER);
     }
-    private List<Project>projectList=new ArrayList<>();
+    public Manager(String name,String password,ROLE role){
+        this.setName(name);
+        this.setPassword(password);
+        this.setRole(role);
+    }
+    private Set<Project> projectList=new HashSet<>();
 
-    public List<Project> getProjectList() {
+    public Set<Project> getProjectList() {
         return projectList;
     }
 
-    public void setProjectList(List<Project> projectList) {
+    public void setProjectList(Set<Project> projectList) {
         this.projectList = projectList;
     }
 }

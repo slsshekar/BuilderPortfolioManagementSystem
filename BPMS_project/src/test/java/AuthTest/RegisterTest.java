@@ -1,5 +1,6 @@
 package AuthTest;
 
+import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Register;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,19 +18,19 @@ public class RegisterTest {
     }
 
     @Test
-    void registerValidUser() {
-        boolean result = register.register("raman", "123", ROLE.MANAGER);
+    void registerValidUser() throws RoleMismatchException {
+        boolean result = register.register("shikhar", "1234", ROLE.MANAGER);
         assertTrue(result);
     }
 
     @Test
-    void registerExistingUser() {
-        assertThrowsExactly(IllegalArgumentException.class, () -> register.register("abc", "1234", ROLE.MANAGER));
-
+    void registerExistingUser() throws RoleMismatchException{
+        register.register("abc", "12345", ROLE.MANAGER);
+        assertThrowsExactly(IllegalArgumentException.class, () -> register.register("abc", "12345", ROLE.MANAGER));
     }
 
     @Test
-    void registerEmptyUsername() {
+    void registerEmptyUsername() throws RoleMismatchException{
         assertThrowsExactly(IllegalArgumentException.class, () ->
                 register.register("", "1234", ROLE.MANAGER)
         );
