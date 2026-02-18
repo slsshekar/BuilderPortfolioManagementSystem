@@ -11,7 +11,11 @@ import org.junit.platform.suite.api.Suite;
         ProjectServiceTest.TestCreate.class,
         ProjectServiceTest.TestGetProjectListByClientName.class,
         ProjectServiceTest.TestGetProjectListByManagerName.class,
-//        TaskTests.class
+        TaskTests.AssignTaskToBuilderTest.class,
+        TaskTests.CreateTaskTest.class,
+        TaskTests.GetTasksBasedOnProjectStatusTest.class,
+        TaskTests.GetTasksByProjectIdTest.class,
+        TaskTests.UpdateTaskStatusTest.class
 })
 public class AllTests {
 }

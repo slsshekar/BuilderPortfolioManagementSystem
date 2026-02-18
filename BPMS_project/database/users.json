@@ -1,23 +1,51 @@
 {
+  "manager-2" : {
+    "id" : 93,
+    "name" : "manager-2",
+    "password" : "12345",
+    "role" : "MANAGER",
+    "projectList" : [ "testProject-2" ]
+  },
+  "manager-1" : {
+    "id" : 54,
+    "name" : "manager-1",
+    "password" : "12345",
+    "role" : "MANAGER",
+    "projectList" : [ ]
+  },
   "abc" : {
-    "id" : 4,
+    "id" : 14,
     "name" : "abc",
     "password" : "1234",
     "role" : "MANAGER",
     "projectList" : [ ]
   },
-  "raman1" : {
-    "id" : 9,
-    "name" : "raman1",
+  "testCreateClient" : {
+    "id" : 26,
+    "name" : "testCreateClient",
     "password" : "1234",
-    "role" : "BUILDER",
-    "taskList" : [ ]
+    "role" : "CLIENT",
+    "projectList" : [ "testCreate-1" ]
   },
-  "raman" : {
-    "id" : 5,
-    "name" : "raman",
-    "password" : "123",
-    "role" : "MANAGER",
-    "projectList" : [ ]
+  "client-2" : {
+    "id" : 80,
+    "name" : "client-2",
+    "password" : "12345",
+    "role" : "CLIENT",
+    "projectList" : [ "testProject-2" ]
+  },
+  "client-1" : {
+    "id" : 45,
+    "name" : "client-1",
+    "password" : "12345",
+    "role" : "CLIENT",
+    "projectList" : [ "testProject-1" ]
+  },
+  "approveClient" : {
+    "id" : 17,
+    "name" : "approveClient",
+    "password" : "1234",
+    "role" : "CLIENT",
+    "projectList" : [ "testApprove-1" ]
   }
 }
