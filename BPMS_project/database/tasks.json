@@ -4,10 +4,21 @@
     "name" : "task",
     "description" : "task",
     "projectName" : "project",
-    "builderList" : [ "builder" ],
+    "builderList" : [ "bil1", "builder" ],
     "managerName" : "manager",
     "startDate" : "2020-10-22",
     "endDate" : "2025-10-22",
-    "status" : "COMPLETED"
+    "status" : "UPCOMING"
+  },
+  "task1" : {
+    "id" : 1,
+    "name" : "task1",
+    "description" : "task1",
+    "projectName" : "pro1",
+    "builderList" : [ "bil1" ],
+    "managerName" : "man1",
+    "startDate" : "2004-03-22",
+    "endDate" : "2005-04-22",
+    "status" : "UPCOMING"
   }
 }

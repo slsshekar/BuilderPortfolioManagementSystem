@@ -14,6 +14,8 @@ import java.util.Scanner;
 
 public class AdminUI {
 
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     public static void show(Scanner scanner) {
         ProjectService projectService = new ProjectService();
 
@@ -79,16 +81,21 @@ public class AdminUI {
         System.out.print("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
-        LocalDate startDate = Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
-        if (startDate == null)
+        LocalDate startDate = readDate(scanner, "Enter start date (dd-MM-yyyy): ");
+        if (startDate == null) {
+            System.out.println("Project not approved");
             return;
+        }
 
-        LocalDate endDate = Utility.readDate(scanner, "Enter end date (dd-MM-yyyy): ");
-        if (endDate == null)
+        LocalDate endDate = readDate(scanner, "Enter end date (dd-MM-yyyy): ");
+        if (endDate == null) {
+            System.out.println("Project not approved");
             return;
+        }
 
         if (endDate.isBefore(startDate)) {
             System.out.println("End date cannot be before start date.");
+            System.out.println("Project not approved");
             return;
         }
 
@@ -117,4 +124,14 @@ public class AdminUI {
         }
     }
 
+    private static LocalDate readDate(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        String dateStr = scanner.nextLine().trim();
+        try {
+            return LocalDate.parse(dateStr, DATE_FORMAT);
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format. Please use dd-MM-yyyy (e.g. 15-03-2026)");
+            return null;
+        }
+    }
 }

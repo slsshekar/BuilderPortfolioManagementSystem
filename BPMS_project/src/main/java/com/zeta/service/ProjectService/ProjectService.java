@@ -31,10 +31,10 @@ public class ProjectService {
         Utility.validateInput(project.getDescription(), "project description");
         Utility.validateInput(clientName, "client name");
         if (!userMap.containsKey(clientName)) {
-            throw new ClientDoesNotExistException(clientName + " doesnt exist");
+            throw new ClientDoesNotExistException(clientName + " client does not exist");
         }
         if (projectHashMap.containsKey(project.getName())) {
-            throw new ProjectAlreadyExistsException(project.getName() + " already exists!");
+            throw new ProjectAlreadyExistsException(project.getName() + " project already exists!");
         }
         project.setClientName(clientName);
         projectHashMap.put(project.getName(), project);
@@ -43,7 +43,6 @@ public class ProjectService {
         FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
         FileService.saveToFile(userMap, "database/users.json", mapper);
         return projectHashMap.containsKey(project.getName());
-
     }
 
     public boolean approve(String projectName, LocalDate startDate, LocalDate endDate)
@@ -51,7 +50,7 @@ public class ProjectService {
         projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
         Utility.validateInput(projectName, "project name");
         if (!projectHashMap.containsKey(projectName)) {
-            throw new ProjectDoestNotExistException(projectName + " does not exist");
+            throw new ProjectDoestNotExistException(projectName + " project does not exist");
         }
         Project project = projectHashMap.get(projectName);
         project.setStatus(STATUS.UPCOMING);
@@ -68,11 +67,11 @@ public class ProjectService {
         Utility.validateInput(projectName, "project name");
         Utility.validateInput(managerName, "manager name");
         if (!projectHashMap.containsKey(projectName)) {
-            throw new ProjectDoestNotExistException(projectName + " doesnt exist");
+            throw new ProjectDoestNotExistException(projectName + " project does not exist");
         }
         Project project = projectHashMap.get(projectName);
         if (!userMap.containsKey(managerName)) {
-            throw new UserNotFoundException(managerName + " does not exist");
+            throw new UserNotFoundException(managerName + " manager does not exist");
         }
         User user = userMap.get(managerName);
         if (user.getRole() != ROLE.MANAGER) {
@@ -92,7 +91,7 @@ public class ProjectService {
         Client client;
         Utility.validateInput(clientName, "client name");
         if (!userMap.containsKey(clientName)) {
-            throw new UserNotFoundException(clientName + " does not exist");
+            throw new UserNotFoundException(clientName + " client does not exist");
         }
         client = (Client) userMap.get(clientName);
         return client.getProjectList();
@@ -104,7 +103,7 @@ public class ProjectService {
         Manager manager;
         Utility.validateInput(managerName, "manager name");
         if (!userMap.containsKey(managerName)) {
-            throw new UserNotFoundException(managerName + " does not exist");
+            throw new UserNotFoundException(managerName + " manager does not exist");
         }
         manager = (Manager) userMap.get(managerName);
         return manager.getProjectList();
@@ -115,7 +114,7 @@ public class ProjectService {
         projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
         Utility.validateInput(clientName, "client name");
         if (!userMap.containsKey(clientName)) {
-            throw new UserNotFoundException(clientName + " does not exist");
+            throw new UserNotFoundException(clientName + " client does not exist");
         }
         Client client = (Client) userMap.get(clientName);
         Map<String, STATUS> projectStatusMap = new HashMap<>();

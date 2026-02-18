@@ -36,6 +36,7 @@ public class LoginUI {
                     ClientUI.show(scanner, username);
                     break;
                 case BUILDER:
+                    BuilderUI.show(scanner, username);
                     System.out.println("Welcome Builder!");
                     break;
                 case MANAGER:

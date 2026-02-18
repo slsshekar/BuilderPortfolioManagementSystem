@@ -1,23 +1,23 @@
 {
-  "manager" : {
-    "id" : 1,
-    "name" : "manager",
-    "password" : "manager",
-    "role" : "MANAGER",
-    "projectList" : [ "project" ]
-  },
-  "builder" : {
-    "id" : 20,
-    "name" : "builder",
-    "password" : "builder",
-    "role" : "BUILDER",
-    "taskList" : [ "task" ]
-  },
-  "client" : {
+  "bil1" : {
     "id" : 3,
-    "name" : "client",
-    "password" : "client",
+    "name" : "bil1",
+    "password" : "bil1",
+    "role" : "BUILDER",
+    "taskList" : [ "task", "task1" ]
+  },
+  "man1" : {
+    "id" : 2,
+    "name" : "man1",
+    "password" : "man1",
+    "role" : "MANAGER",
+    "projectList" : [ "pro1" ]
+  },
+  "cli1" : {
+    "id" : 1,
+    "name" : "cli1",
+    "password" : "cli1",
     "role" : "CLIENT",
-    "projectList" : [ "project" ]
+    "projectList" : [ "pro1" ]
   }
 }
