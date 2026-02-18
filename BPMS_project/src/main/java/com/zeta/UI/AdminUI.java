@@ -30,8 +30,7 @@ public class AdminUI {
     private static final UserDAO userDAO = new UserDAO(mapper);
 
     // ---------- Service Layer ----------
-    private static final ProjectService projectService =
-            new ProjectService(projectDAO, userDAO);
+    private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
 
     // ================= MAIN MENU =================
 
@@ -109,16 +108,17 @@ public class AdminUI {
         System.out.print("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
-        LocalDate startDate =
-                Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
-        if (startDate == null) return;
+        LocalDate startDate = Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
+        if (startDate == null)
+            return;
 
-        LocalDate endDate =
-                Utility.readDate(scanner, "Enter end date (dd-MM-yyyy): ");
-        if (endDate == null) return;
+        LocalDate endDate = Utility.readDate(scanner, "Enter end date (dd-MM-yyyy): ");
+        if (endDate == null)
+            return;
 
         if (endDate.isBefore(startDate)) {
             System.out.println("End date cannot be before start date.");
+            System.out.println("Project not approved");
             return;
         }
 
@@ -145,10 +145,8 @@ public class AdminUI {
             projectService.assignManager(projectName, managerName);
             System.out.println("Manager assigned successfully!");
 
-        } catch (ProjectDoestNotExistException |
-                 UserNotFoundException |
-                 RoleMismatchException |
-                 IllegalArgumentException e) {
+        } catch (ProjectDoestNotExistException | UserNotFoundException | RoleMismatchException
+                | IllegalArgumentException e) {
 
             System.out.println("Assignment failed: " + e.getMessage());
         }

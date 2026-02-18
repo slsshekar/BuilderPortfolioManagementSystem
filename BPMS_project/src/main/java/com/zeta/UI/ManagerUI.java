@@ -29,17 +29,13 @@ public class ManagerUI {
     private static final TaskDAO taskDAO = new TaskDAO(mapper);
     private static final UserDAO userDAO = new UserDAO(mapper);
 
-    private static final ProjectService projectService =
-            new ProjectService(projectDAO, userDAO);
+    private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
 
-    private static final TaskService taskService =
-            new TaskService(taskDAO, userDAO);
+    private static final TaskService taskService = new TaskService(taskDAO, userDAO);
 
-    private static final TaskAssignmentService assignmentService =
-            new TaskAssignmentService(taskDAO, userDAO);
+    private static final TaskAssignmentService assignmentService = new TaskAssignmentService(taskDAO, userDAO);
 
-    private static final ManagerService managerService =
-            new ManagerService(projectDAO, taskService);
+    private static final ManagerService managerService = new ManagerService(projectDAO, taskService);
 
     public static void show(Scanner scanner, String username) {
 
@@ -51,7 +47,7 @@ public class ManagerUI {
                 switch (choice) {
                     case 1 -> viewProjects(username);
                     case 2 -> createTask(scanner, username);
-                    case 3 -> viewProject(scanner,username);
+                    case 3 -> viewProject(scanner, username);
                     case 4 -> assignBuilder(scanner);
                     case 5 -> updateTaskStatus(scanner);
                     case 6 -> {
@@ -68,34 +64,33 @@ public class ManagerUI {
     }
 
     private static void printMenu() {
-        System.out.println("\n=== Manager Menu ===");
+        System.out.println("\n Manager Menu : ");
         System.out.println("1. View Projects");
         System.out.println("2. Create Task");
         System.out.println("3. View Project Details");
         System.out.println("4. Assign Builder");
         System.out.println("5. Update Task Status");
         System.out.println("6. Logout");
+        System.out.print("Enter your choice (1-6): ");
     }
-
 
     private static void viewProjects(String username) throws UserNotFoundException {
 
-        Set<String> projectNames =
-                projectService.getProjectsByManagerName(username);
+        Set<String> projectNames = projectService.getProjectsByManagerName(username);
 
         if (projectNames == null || projectNames.isEmpty()) {
             System.out.println("No projects assigned to you.");
             return;
         }
 
-        var groupedProjects =
-                managerService.getProjectsByStatus(projectNames);
+        var groupedProjects = managerService.getProjectsByStatus(projectNames);
 
-        System.out.println("\n====== PROJECT BOARD ======");
+        System.out.println("\n PROJECT BOARD: ");
 
         for (STATUS status : STATUS.values()) {
 
-            if (status == STATUS.NOT_APPROVED) continue;
+            if (status == STATUS.NOT_APPROVED)
+                continue;
 
             System.out.println("\n" + getEmoji(status) + " " + status);
 
@@ -108,7 +103,6 @@ public class ManagerUI {
             }
         }
     }
-
 
     private static String getEmoji(STATUS status) {
         return switch (status) {
@@ -136,15 +130,12 @@ public class ManagerUI {
         System.out.print("Enter task description: ");
         String desc = scanner.nextLine().trim();
 
-        LocalDate start =
-                Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
+        LocalDate start = Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
 
-        LocalDate end =
-                Utility.readDate(scanner, "Enter end date (dd-MM-yyyy): ");
+        LocalDate end = Utility.readDate(scanner, "Enter end date (dd-MM-yyyy): ");
 
         managerService.createTaskForProject(
-                projectName, taskName, desc, username, start, end
-        );
+                projectName, taskName, desc, username, start, end);
 
         System.out.println("Task created successfully");
     }
@@ -154,8 +145,8 @@ public class ManagerUI {
         System.out.print("Enter project name: ");
         String projectName = scanner.nextLine();
         Set<String> projectNames = projectService.getProjectsByManagerName(username);
-        if(!projectNames.contains(projectName)){
-            System.out.println(projectName+" does not exist for you");
+        if (!projectNames.contains(projectName)) {
+            System.out.println(projectName + " does not exist for you");
         }
         var project = managerService.getProject(projectName);
         System.out.println(project);
@@ -180,7 +171,7 @@ public class ManagerUI {
 
     private static void assignBuilder(Scanner scanner) {
         System.out.println("Enter project name:");
-        String projectName= scanner.nextLine();
+        String projectName = scanner.nextLine();
         System.out.print("Enter task name: ");
         String taskName = scanner.nextLine();
         System.out.print("Enter builder name: ");

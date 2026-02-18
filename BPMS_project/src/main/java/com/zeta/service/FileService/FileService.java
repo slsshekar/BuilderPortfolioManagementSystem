@@ -9,33 +9,32 @@ import java.util.Map;
 
 public class FileService {
     private static File getProjectFile(String relativePath) {
-        File file = new File(relativePath);
-        if (file.exists()) {
-            return file;
-        }
 
-        File dir = new File(System.getProperty("user.dir"));
-        while (dir != null) {
-            File candidate = new File(dir, relativePath);
-            File pom = new File(dir, "pom.xml");
-            if (pom.exists() && (candidate.exists() || candidate.getParentFile().exists())) {
-                return candidate;
-            }
+        try {
+            File codeLocation = new File(
+                    FileService.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()
+            );
 
-            File[] children = dir.listFiles(File::isDirectory);
-            if (children != null) {
-                for (File child : children) {
-                    File childCandidate = new File(child, relativePath);
-                    File childPom = new File(child, "pom.xml");
-                    if (childPom.exists() && (childCandidate.exists() || childCandidate.getParentFile().exists())) {
-                        return childCandidate;
-                    }
+            // Go up until we find pom.xml
+            File dir = codeLocation;
+
+            while (dir != null) {
+                File pomFile = new File(dir, "pom.xml");
+                if (pomFile.exists()) {
+                    return new File(dir, relativePath);
                 }
+                dir = dir.getParentFile();
             }
 
-            dir = dir.getParentFile();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to resolve project root", e);
         }
-        return file;
+
+        throw new RuntimeException("pom.xml not found in classpath hierarchy.");
     }
 
     public static <T> Map<String, T> loadFromFile(

@@ -21,11 +21,11 @@ public class ManagerService {
     }
 
     public void createTaskForProject(String projectName,
-                                     String taskName,
-                                     String description,
-                                     String managerName,
-                                     LocalDate start,
-                                     LocalDate end) {
+            String taskName,
+            String description,
+            String managerName,
+            LocalDate start,
+            LocalDate end) {
 
         Map<String, Project> projects = projectDAO.load();
 
@@ -45,8 +45,7 @@ public class ManagerService {
                 projectName,
                 managerName,
                 start,
-                end
-        );
+                end);
 
         // update project task list
         project.getTaskList().add(taskName);
@@ -68,7 +67,6 @@ public class ManagerService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.groupingBy(Project::getStatus));
     }
-    
 
     public Project getProject(String projectName) {
 

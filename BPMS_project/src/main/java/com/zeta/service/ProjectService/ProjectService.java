@@ -50,7 +50,6 @@ public class ProjectService {
         return true;
     }
 
-
     public boolean approve(String projectName, LocalDate startDate, LocalDate endDate)
             throws ProjectDoestNotExistException {
 
@@ -72,7 +71,6 @@ public class ProjectService {
 
         return true;
     }
-
 
     public boolean assignManager(String projectName, String managerName)
             throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
@@ -124,7 +122,6 @@ public class ProjectService {
         return client.getProjectList();
     }
 
-
     public Set<String> getProjectsByManagerName(String managerName)
             throws UserNotFoundException {
 
@@ -140,7 +137,6 @@ public class ProjectService {
 
         return manager.getProjectList();
     }
-
 
     public Map<String, STATUS> getProjectStatusByClient(String clientName)
             throws UserNotFoundException {
@@ -165,7 +161,6 @@ public class ProjectService {
 
         return result;
     }
-
 
     public List<String> getUnapprovedProjects() {
 

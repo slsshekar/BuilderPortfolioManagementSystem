@@ -13,6 +13,9 @@ import com.zeta.model.STATUS;
 import com.zeta.service.ProjectService.ProjectService;
 import com.zeta.service.utility.Utility;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -22,15 +25,11 @@ public class ClientUI {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+    private static final ProjectDAO projectDAO = new ProjectDAO(mapper);
 
-    private static final ProjectDAO projectDAO =
-            new ProjectDAO(mapper);
+    private static final UserDAO userDAO = new UserDAO(mapper);
 
-    private static final UserDAO userDAO =
-            new UserDAO(mapper);
-
-    private static final ProjectService projectService =
-            new ProjectService(projectDAO, userDAO);
+    private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
 
     public static void show(Scanner scanner, String clientName) {
 
@@ -59,7 +58,6 @@ public class ClientUI {
         System.out.print("Enter your choice: ");
     }
 
-
     private static void createProject(Scanner scanner, String clientName) {
 
         System.out.print("Enter project name: ");
@@ -73,16 +71,13 @@ public class ClientUI {
                     projectName,
                     projectDescription,
                     null,
-                    null
-            );
+                    null);
 
             projectService.create(project, clientName);
 
             System.out.println("Project created successfully!");
 
-        } catch (ProjectAlreadyExistsException |
-                 ClientDoesNotExistException |
-                 IllegalArgumentException e) {
+        } catch (ProjectAlreadyExistsException | ClientDoesNotExistException | IllegalArgumentException e) {
 
             System.out.println("Project creation failed: " + e.getMessage());
         }
@@ -91,23 +86,46 @@ public class ClientUI {
     private static void getProjectStatus(String clientName) {
 
         try {
-            Map<String, STATUS> projectStatusMap =
-                    projectService.getProjectStatusByClient(clientName);
+            Map<String, STATUS> projectStatusMap = projectService.getProjectStatusByClient(clientName);
 
             if (projectStatusMap.isEmpty()) {
                 System.out.println("No projects found.");
                 return;
             }
 
-            System.out.println("\nYour Projects:");
+            // Group projects by status
+            Map<STATUS, List<String>> grouped = new LinkedHashMap<>();
+            for (STATUS s : STATUS.values()) {
+                grouped.put(s, new ArrayList<>());
+            }
+            for (Map.Entry<String, STATUS> entry : projectStatusMap.entrySet()) {
+                grouped.get(entry.getValue()).add(entry.getKey());
+            }
 
-            projectStatusMap.forEach(
-                    (name, status) ->
-                            System.out.println(name + " : " + status)
-            );
+            System.out.println("\n PROJECT BOARD: ");
 
+            for (STATUS status : STATUS.values()) {
+                System.out.println("\n" + getEmoji(status) + " " + status);
+                List<String> projects = grouped.get(status);
+                if (projects == null || projects.isEmpty()) {
+                    System.out.println("  No projects");
+                } else {
+                    for (String name : projects) {
+                        System.out.println("  - " + name);
+                    }
+                }
+            }
         } catch (UserNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    private static String getEmoji(STATUS status) {
+        return switch (status) {
+            case NOT_APPROVED -> "📋";
+            case UPCOMING -> "📌";
+            case IN_PROGRESS -> "🚧";
+            case COMPLETED -> "✅";
+        };
     }
 }

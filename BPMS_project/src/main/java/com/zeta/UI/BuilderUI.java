@@ -29,8 +29,7 @@ public class BuilderUI {
 
     // ===== service layer =====
     private static final TaskService taskService = new TaskService(taskDAO, userDAO);
-    private static final TaskAssignmentService assignmentService =
-            new TaskAssignmentService(taskDAO, userDAO);
+    private static final TaskAssignmentService assignmentService = new TaskAssignmentService(taskDAO, userDAO);
 
     // ================= MAIN UI =================
 
@@ -86,7 +85,6 @@ public class BuilderUI {
         taskNames.forEach(t -> System.out.println("• " + t));
     }
 
-
     /**
      * Filter builder tasks by status
      */
@@ -120,7 +118,6 @@ public class BuilderUI {
         System.out.println("\nTasks with status " + status + ":");
         filteredTasks.forEach(t -> System.out.println("• " + t.getName()));
     }
-
 
     /**
      * Show full task info

@@ -31,46 +31,59 @@ import TaskServiceTest.TaskServiceGetAllTasksTest;
 import TaskServiceTest.TaskServiceGetTaskTest;
 import TaskServiceTest.TaskServiceUpdateTaskStatusTest;
 
+// Task Tests (legacy)
+import TaskTests.AssignTaskToBuilderTest;
+import TaskTests.CreateTaskTest;
+import TaskTests.GetTasksByProjectNameTest;
+import TaskTests.UpdateTaskStatusTest;
+
 @Suite
 @SelectClasses({
 
-        // Auth
-        LoginTests.class,
-        RegisterTest.class,
+                // Auth
+                LoginTests.class,
+                RegisterTest.class,
 
-        // Manager Service
-        ManagerServiceCreateTaskTest.class,
-        ManagerServiceGetProjectsByStatusTest.class,
-        ManagerServiceGetProjectTest.class,
-        ManagerServiceGetTasksOfProjectTest.class,
+                // Manager Service
+                ManagerServiceCreateTaskTest.class,
+                ManagerServiceGetProjectsByStatusTest.class,
+                ManagerServiceGetProjectTest.class,
+                ManagerServiceGetTasksOfProjectTest.class,
 
-        // Project Service
-        TestApprove.class,
-        TestAssignManager.class,
-        TestCreate.class,
-        TestGetProjectListByClientName.class,
-        TestGetProjectListByManagerName.class,
+                // Project Service
+                TestApprove.class,
+                TestAssignManager.class,
+                TestCreate.class,
+                TestGetProjectListByClientName.class,
+                TestGetProjectListByManagerName.class,
 
-        // Task Assignment Service
-        TaskAssignmentAssignBuilderTest.class,
-        TaskAssignmentGetBuildersOfTaskTest.class,
-        TaskAssignmentGetTasksOfBuilderTest.class,
-        TaskAssignmentRemoveBuilderTest.class,
+                // Task Assignment Service
+                TaskAssignmentAssignBuilderTest.class,
+                TaskAssignmentGetBuildersOfTaskTest.class,
+                TaskAssignmentGetTasksOfBuilderTest.class,
+                TaskAssignmentRemoveBuilderTest.class,
 
-        // Task Service
-        TaskServiceCreateTaskTest.class,
-        TaskServiceGetAllTasksTest.class,
-        TaskServiceGetTaskTest.class,
-        TaskServiceUpdateTaskStatusTest.class,
+                // Task Service
+                TaskServiceCreateTaskTest.class,
+                TaskServiceGetAllTasksTest.class,
+                TaskServiceGetTaskTest.class,
+                TaskServiceUpdateTaskStatusTest.class,
 
-        AdminUITest.class,
-        BuilderUITest.class,
-        ClientUITest.class,
-        LoginUITest.class,
-        MainMenuUITest.class,
-        ManagerUITest.class,
-        RegisterUITest.class,
-        MainTest.class
+                // Task Tests (legacy)
+                AssignTaskToBuilderTest.class,
+                CreateTaskTest.class,
+                GetTasksByProjectNameTest.class,
+                UpdateTaskStatusTest.class,
+
+                // UI Tests
+                AdminUITest.class,
+                BuilderUITest.class,
+                ClientUITest.class,
+                LoginUITest.class,
+                MainMenuUITest.class,
+                ManagerUITest.class,
+                RegisterUITest.class,
+                MainTest.class
 
 })
 public class AllTests {
