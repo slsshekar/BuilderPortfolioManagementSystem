@@ -1,7 +1,9 @@
 package com.zeta.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Builder extends User {
     public Builder(){
@@ -12,13 +14,13 @@ public class Builder extends User {
         this.setPassword(password);
         this.setRole(role);
     }
-    private List<Task> taskList=new ArrayList<>();
+    private Set<String> taskList=new HashSet<>();
 
-    public List<Task> getTaskList() {
+    public Set<String> getTaskList() {
         return taskList;
     }
 
-    public void setTaskList(List<Task> taskList) {
+    public void setTaskList(Set<String> taskList) {
         this.taskList = taskList;
     }
 }

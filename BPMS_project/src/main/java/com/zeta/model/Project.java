@@ -93,6 +93,19 @@ public class Project {
     public void setStatus(STATUS status) {
         this.status = status;
     }
+    @Override
+    public String toString() {
+        return "Project{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", managerList=" + managerList +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", status=" + status +
+                ", taskList=" + taskList +
+                '}';
+    }
+
 
 
 }

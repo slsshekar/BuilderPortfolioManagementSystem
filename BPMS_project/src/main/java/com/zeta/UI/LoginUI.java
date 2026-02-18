@@ -4,6 +4,7 @@ import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Login;
+import com.zeta.UI.ManagerUI;
 
 import java.util.Scanner;
 
@@ -39,6 +40,7 @@ public class LoginUI {
                     break;
                 case MANAGER:
                     System.out.println("Welcome Manager!");
+                    ManagerUI.show(scanner,username);
                     break;
                 default:
                     System.out.println("Welcome " + role + "!");

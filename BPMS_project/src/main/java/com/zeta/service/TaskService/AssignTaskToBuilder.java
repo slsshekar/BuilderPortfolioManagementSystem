@@ -13,25 +13,22 @@ public class AssignTaskToBuilder {
 
     private static final String FILE_NAME = "database/tasks.json";
 
-    public boolean assignTaskToBuilder(Task task, Builder builder) throws InvalidTaskException, TaskNotFoundException {
+    public boolean assignTaskToBuilder(String taskName, String builderName) throws InvalidTaskException, TaskNotFoundException {
 
-        if (task == null) {
-            throw new InvalidTaskException("Task cannot be null");
-        }
-
-        if (builder == null) {
-            throw new InvalidTaskException("Builder cannot be null");
-        }
+//        if (taskName == null) {
+//            throw new InvalidTaskException("Task cannot be null");
+//        }
+//
+//        if (builder == null) {
+//            throw new InvalidTaskException("Builder cannot be null");
+//        }
 
         Map<String, Task> taskMap = LoadFromTaskFile.load(FILE_NAME);
-        String key = String.valueOf(task.getName());
-
-        if (!taskMap.containsKey(key)) {
-            throw new TaskNotFoundException("Task with Name " + task.getName() + " not found");
+        if (!taskMap.containsKey(taskName)) {
+            throw new TaskNotFoundException("Task with Name " + taskName + " not found");
         }
-
-        task.getBuilderList().add(builder);
-        taskMap.put(key, task);
+        Task task=taskMap.get(taskName);
+        task.getBuilderList().add(builderName);
         SaveToTaskFile.save(taskMap, FILE_NAME);
 
         System.out.println("Builder assigned to task: " + task.getName());

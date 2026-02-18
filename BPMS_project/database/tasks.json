@@ -1,0 +1,13 @@
+{
+  "task" : {
+    "id" : 1,
+    "name" : "task",
+    "description" : "task",
+    "projectName" : "project",
+    "builderList" : [ "builder" ],
+    "managerName" : "manager",
+    "startDate" : "2020-10-22",
+    "endDate" : "2025-10-22",
+    "status" : "COMPLETED"
+  }
+}
