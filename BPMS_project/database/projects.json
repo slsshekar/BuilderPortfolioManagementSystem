@@ -1,13 +1,24 @@
 {
-  "pro1" : {
-    "name" : "pro1",
-    "description" : "pro1",
-    "taskList" : [ "task1" ],
-    "managerList" : [ "man1" ],
-    "clientName" : "cli1",
+  "Project Beta" : {
+    "name" : "Project Beta",
+    "description" : "Description for Project Beta",
+    "taskList" : [ "Task B" ],
+    "managerList" : [ ],
+    "clientName" : null,
     "status" : "IN_PROGRESS",
-    "startDate" : "2004-03-22",
-    "endDate" : "2023-03-22",
-    "id" : 1
+    "startDate" : null,
+    "endDate" : null,
+    "id" : 0
+  },
+  "Project Alpha" : {
+    "name" : "Project Alpha",
+    "description" : "Description for Project Alpha",
+    "taskList" : [ "Task A" ],
+    "managerList" : [ ],
+    "clientName" : null,
+    "status" : "IN_PROGRESS",
+    "startDate" : null,
+    "endDate" : null,
+    "id" : 0
   }
 }

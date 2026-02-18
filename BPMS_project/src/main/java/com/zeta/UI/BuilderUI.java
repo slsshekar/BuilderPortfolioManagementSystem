@@ -30,7 +30,7 @@ public class BuilderUI {
                     System.out.println("Logged out successfully.");
                     return;
                 default:
-                    System.out.println("Please enter a valid number (1-3)");
+                    System.out.println("Please enter a valid number (1-2)");
                     break;
             }
         }
@@ -46,8 +46,7 @@ public class BuilderUI {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         // Load all tasks
-        Map<String, Task> taskMap =
-                FileService.loadFromFile(TASK_FILE, mapper, Task.class);
+        Map<String, Task> taskMap = FileService.loadFromFile(TASK_FILE, mapper, Task.class);
 
         boolean found = false;
 
@@ -72,6 +71,3 @@ public class BuilderUI {
     }
 
 }
-
-
-

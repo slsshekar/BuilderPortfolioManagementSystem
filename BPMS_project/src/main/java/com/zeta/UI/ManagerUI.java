@@ -19,6 +19,7 @@ public class ManagerUI {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     private static final ManagerService managerService = new ManagerService(mapper);
+
     public static void show(Scanner scanner, String username) {
         while (true) {
             printMenu();
@@ -43,13 +44,14 @@ public class ManagerUI {
     }
 
     private static void printMenu() {
-        System.out.println("\n=== Manager Menu ===");
+        System.out.println("\n Manager Menu : ");
         System.out.println("1. View Projects");
         System.out.println("2. Create Task");
         System.out.println("3. View Project Details");
         System.out.println("4. Assign Builder");
         System.out.println("5. Update Task Status");
         System.out.println("6. Logout");
+        System.out.print("Enter your choice (1-6): ");
     }
 
     private static void viewProjects(String username) throws UserNotFoundException {
@@ -57,13 +59,13 @@ public class ManagerUI {
         // you already have this
         var projectNames = projectService.getProjectsByManagerName(username);
 
-        var groupedProjects =
-                managerService.getProjectsByStatusForManager(projectNames);
+        var groupedProjects = managerService.getProjectsByStatusForManager(projectNames);
 
-        System.out.println("\n====== PROJECT BOARD ======");
+        System.out.println("\n PROJECT BOARD: ");
 
         for (STATUS status : STATUS.values()) {
-            if(status==STATUS.NOT_APPROVED)continue;
+            if (status == STATUS.NOT_APPROVED)
+                continue;
             System.out.println("\n" + getEmoji(status) + " " + status);
 
             var projects = groupedProjects.get(status);
@@ -78,6 +80,7 @@ public class ManagerUI {
             }
         }
     }
+
     private static String getEmoji(STATUS status) {
         return switch (status) {
             case UPCOMING -> "📌";
@@ -85,8 +88,7 @@ public class ManagerUI {
             case COMPLETED -> "✅";
             case NOT_APPROVED -> "wont use";
         };
-        }
-
+    }
 
     private static void createTask(Scanner scanner, String username) throws UserNotFoundException {
 

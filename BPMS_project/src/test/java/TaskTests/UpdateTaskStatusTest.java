@@ -31,12 +31,12 @@ public class UpdateTaskStatusTest {
         writer.close();
     }
 
-    private Task createSampleTask(int id, String name, int projectId, STATUS status) {
+    private Task createSampleTask(int id, String name, String projectName, STATUS status) {
         Task task = new Task();
         task.setId(id);
         task.setName(name);
         task.setDescription("Sample description for " + name);
-        task.setProjectId(projectId);
+        task.setProjectName(projectName);
         task.setStatus(status);
         return task;
     }
@@ -44,7 +44,7 @@ public class UpdateTaskStatusTest {
     @Test
     void testUpdateStatusOfExistingTask()
             throws InvalidTaskException, TaskAlreadyExistsException, TaskNotFoundException {
-        Task task = createSampleTask(1, "Database Setup", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(1, "Database Setup", "Project Alpha", STATUS.UPCOMING);
         createTask.createTask(task);
 
         boolean result = updateTaskStatus.updateTaskStatus(task, STATUS.IN_PROGRESS);
@@ -53,7 +53,7 @@ public class UpdateTaskStatusTest {
 
     @Test
     void testUpdateStatusOfNonExistentTask() {
-        Task task = createSampleTask(999, "Sample Task", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(999, "Sample Task", "Project Alpha", STATUS.UPCOMING);
 
         assertThrows(TaskNotFoundException.class, () -> {
             updateTaskStatus.updateTaskStatus(task, STATUS.COMPLETED);
@@ -69,7 +69,7 @@ public class UpdateTaskStatusTest {
 
     @Test
     void testUpdateStatusWithNullStatus() throws InvalidTaskException, TaskAlreadyExistsException {
-        Task task = createSampleTask(2, "API Design", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(2, "API Design", "Project Alpha", STATUS.UPCOMING);
         createTask.createTask(task);
 
         assertThrows(InvalidTaskException.class, () -> {
@@ -79,7 +79,7 @@ public class UpdateTaskStatusTest {
 
     @Test
     void testUpdateStatusToCompleted() throws InvalidTaskException, TaskAlreadyExistsException, TaskNotFoundException {
-        Task task = createSampleTask(3, "Write Tests", 200, STATUS.IN_PROGRESS);
+        Task task = createSampleTask(3, "Write Tests", "Project Beta", STATUS.IN_PROGRESS);
         createTask.createTask(task);
 
         boolean result = updateTaskStatus.updateTaskStatus(task, STATUS.COMPLETED);

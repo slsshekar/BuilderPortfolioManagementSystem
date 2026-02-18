@@ -67,12 +67,39 @@ public class ClientUI {
                 return;
             }
 
-            System.out.println("\n Your Projects : ");
+            // Group projects by status
+            Map<STATUS, java.util.List<String>> grouped = new java.util.LinkedHashMap<>();
+            for (STATUS s : STATUS.values()) {
+                grouped.put(s, new java.util.ArrayList<>());
+            }
             for (Map.Entry<String, STATUS> entry : projectStatusMap.entrySet()) {
-                System.out.println("  " + entry.getKey() + " : " + entry.getValue());
+                grouped.get(entry.getValue()).add(entry.getKey());
+            }
+
+            System.out.println("\n PROJECT BOARD: ");
+
+            for (STATUS status : STATUS.values()) {
+                System.out.println("\n" + getEmoji(status) + " " + status);
+                java.util.List<String> projects = grouped.get(status);
+                if (projects == null || projects.isEmpty()) {
+                    System.out.println("  No projects");
+                } else {
+                    for (String name : projects) {
+                        System.out.println("  - " + name);
+                    }
+                }
             }
         } catch (UserNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    private static String getEmoji(STATUS status) {
+        return switch (status) {
+            case NOT_APPROVED -> "📋";
+            case UPCOMING -> "📌";
+            case IN_PROGRESS -> "🚧";
+            case COMPLETED -> "✅";
+        };
     }
 }

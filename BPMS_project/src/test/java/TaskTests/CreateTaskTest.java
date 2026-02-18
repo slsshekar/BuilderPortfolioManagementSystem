@@ -28,19 +28,19 @@ public class CreateTaskTest {
         writer.close();
     }
 
-    private Task createSampleTask(int id, String name, int projectId, STATUS status) {
+    private Task createSampleTask(int id, String name, String projectName, STATUS status) {
         Task task = new Task();
         task.setId(id);
         task.setName(name);
         task.setDescription("Sample description for " + name);
-        task.setProjectId(projectId);
+        task.setProjectName(projectName);
         task.setStatus(status);
         return task;
     }
 
     @Test
     void testCreateValidTask() throws InvalidTaskException, TaskAlreadyExistsException {
-        Task task = createSampleTask(1, "Design UI", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(1, "Design UI", "Project Alpha", STATUS.UPCOMING);
         boolean result = createTask.createTask(task);
         assertTrue(result);
     }
@@ -54,7 +54,7 @@ public class CreateTaskTest {
 
     @Test
     void testCreateTaskWithBlankName() {
-        Task task = createSampleTask(2, "   ", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(2, "   ", "Project Alpha", STATUS.UPCOMING);
         assertThrows(InvalidTaskException.class, () -> {
             createTask.createTask(task);
         });
@@ -62,10 +62,10 @@ public class CreateTaskTest {
 
     @Test
     void testCreateDuplicateTask() throws InvalidTaskException, TaskAlreadyExistsException {
-        Task task = createSampleTask(1, "Design UI", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(1, "Design UI", "Project Alpha", STATUS.UPCOMING);
         createTask.createTask(task);
 
-        Task duplicateTask = createSampleTask(2, "Design UI", 200, STATUS.IN_PROGRESS);
+        Task duplicateTask = createSampleTask(2, "Design UI", "Project Beta", STATUS.IN_PROGRESS);
         assertThrows(TaskAlreadyExistsException.class, () -> {
             createTask.createTask(duplicateTask);
         });
@@ -73,8 +73,8 @@ public class CreateTaskTest {
 
     @Test
     void testCreateMultipleUniqueTasks() throws InvalidTaskException, TaskAlreadyExistsException {
-        Task task1 = createSampleTask(1, "Task A", 100, STATUS.UPCOMING);
-        Task task2 = createSampleTask(2, "Task B", 100, STATUS.IN_PROGRESS);
+        Task task1 = createSampleTask(1, "Task A", "Project Alpha", STATUS.UPCOMING);
+        Task task2 = createSampleTask(2, "Task B", "Project Alpha", STATUS.IN_PROGRESS);
         assertTrue(createTask.createTask(task1));
         assertTrue(createTask.createTask(task2));
     }

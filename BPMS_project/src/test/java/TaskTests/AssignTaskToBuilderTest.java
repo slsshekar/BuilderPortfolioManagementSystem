@@ -3,12 +3,15 @@ package TaskTests;
 import com.zeta.Exceptions.TaskException.InvalidTaskException;
 import com.zeta.Exceptions.TaskException.TaskAlreadyExistsException;
 import com.zeta.Exceptions.TaskException.TaskNotFoundException;
-import com.zeta.model.Builder;
-import com.zeta.model.ROLE;
 import com.zeta.model.STATUS;
 import com.zeta.model.Task;
 import com.zeta.service.TaskService.AssignTaskToBuilder;
 import com.zeta.service.TaskService.CreateTask;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.zeta.service.FileService.FileService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,12 +37,12 @@ public class AssignTaskToBuilderTest {
         writer.close();
     }
 
-    private Task createSampleTask(int id, String name, int projectId, STATUS status) {
+    private Task createSampleTask(int id, String name, String projectName, STATUS status) {
         Task task = new Task();
         task.setId(id);
         task.setName(name);
         task.setDescription("Sample description for " + name);
-        task.setProjectId(projectId);
+        task.setProjectName(projectName);
         task.setStatus(status);
         return task;
     }
@@ -46,54 +50,52 @@ public class AssignTaskToBuilderTest {
     @Test
     void testAssignBuilderToExistingTask()
             throws InvalidTaskException, TaskAlreadyExistsException, TaskNotFoundException {
-        Task task = createSampleTask(1, "Backend API", 100, STATUS.UPCOMING);
+        Task task = createSampleTask(1, "Backend API", "Project Alpha", STATUS.UPCOMING);
         createTask.createTask(task);
 
-        Builder builder = new Builder("John", "pass123", ROLE.BUILDER);
-        boolean result = assignTaskToBuilder.assignTaskToBuilder(task, builder);
+        boolean result = assignTaskToBuilder.assignTaskToBuilder(task.getName(), "John");
         assertTrue(result);
     }
 
     @Test
     void testAssignBuilderToNonExistentTask() {
-        Task task = createSampleTask(999, "Task123", 100, STATUS.UPCOMING);
-        Builder builder = new Builder("John", "pass123", ROLE.BUILDER);
-
         assertThrows(TaskNotFoundException.class, () -> {
-            assignTaskToBuilder.assignTaskToBuilder(task, builder);
+            assignTaskToBuilder.assignTaskToBuilder("NonExistentTask", "John");
         });
     }
 
     @Test
-    void testAssignNullBuilder() throws InvalidTaskException, TaskAlreadyExistsException {
-        Task task = createSampleTask(2, "Testing", 100, STATUS.UPCOMING);
+    void testAssignNullBuilderName() throws InvalidTaskException, TaskAlreadyExistsException {
+        Task task = createSampleTask(2, "Testing", "Project Alpha", STATUS.UPCOMING);
         createTask.createTask(task);
 
-        assertThrows(InvalidTaskException.class, () -> {
-            assignTaskToBuilder.assignTaskToBuilder(task, null);
+        assertDoesNotThrow(() -> {
+            assignTaskToBuilder.assignTaskToBuilder(task.getName(), null);
         });
     }
 
     @Test
-    void testAssignNullTask() {
-        Builder builder = new Builder("John", "pass123", ROLE.BUILDER);
-
-        assertThrows(InvalidTaskException.class, () -> {
-            assignTaskToBuilder.assignTaskToBuilder(null, builder);
+    void testAssignNullTaskName() {
+        assertThrows(TaskNotFoundException.class, () -> {
+            assignTaskToBuilder.assignTaskToBuilder(null, "John");
         });
     }
 
     @Test
     void testAssignMultipleBuildersToSameTask()
             throws InvalidTaskException, TaskAlreadyExistsException, TaskNotFoundException {
-        Task task = createSampleTask(3, "Design DB", 100, STATUS.IN_PROGRESS);
+        Task task = createSampleTask(3, "Design DB", "Project Alpha", STATUS.IN_PROGRESS);
         createTask.createTask(task);
 
-        Builder builder1 = new Builder("Person1", "pass1", ROLE.BUILDER);
-        Builder builder2 = new Builder("Person2", "pass2", ROLE.BUILDER);
+        assertTrue(assignTaskToBuilder.assignTaskToBuilder(task.getName(), "Person1"));
+        assertTrue(assignTaskToBuilder.assignTaskToBuilder(task.getName(), "Person2"));
 
-        assertTrue(assignTaskToBuilder.assignTaskToBuilder(task, builder1));
-        assertTrue(assignTaskToBuilder.assignTaskToBuilder(task, builder2));
-        assertEquals(2, task.getBuilderList().size());
+
+        ObjectMapper mapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        Map<String, Task> taskMap = FileService.loadFromFile("database/tasks.json", mapper, Task.class);
+        Task reloaded = taskMap.get("Design DB");
+        assertEquals(2, reloaded.getBuilderList().size());
     }
 }

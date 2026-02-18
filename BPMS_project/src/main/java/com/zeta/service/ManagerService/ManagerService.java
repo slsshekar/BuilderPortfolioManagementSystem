@@ -16,7 +16,8 @@ public class ManagerService {
         this.mapper = mapper;
     }
 
-    public void createTask(String projectName, String taskName, String description, String username, LocalDate start, LocalDate end) {
+    public void createTask(String projectName, String taskName, String description, String username, LocalDate start,
+            LocalDate end) {
 
         Map<String, Project> projectMap = FileService.loadFromFile("database/projects.json", mapper, Project.class);
 
@@ -65,16 +66,19 @@ public class ManagerService {
         Map<String, User> users = FileService.loadFromFile("database/users.json", mapper, User.class);
 
         Project project = projects.get(projectName);
-        if (project == null) throw new RuntimeException("Project not found");
+        if (project == null)
+            throw new RuntimeException("Project not found");
 
         Task task = tasks.get(taskName);
-        if (task == null) throw new RuntimeException("Task not found");
+        if (task == null)
+            throw new RuntimeException("Task not found");
 
         User user = users.get(builderName);
         if (!(user instanceof Builder builder))
             throw new RuntimeException("Invalid builder");
 
         task.getBuilderList().add(builderName);
+        task.setStatus(STATUS.IN_PROGRESS);
         builder.getTaskList().add(taskName);
 
         FileService.saveToFile(tasks, "database/tasks.json", mapper);
@@ -98,8 +102,7 @@ public class ManagerService {
 
     public Map<STATUS, List<Project>> getProjectsByStatusForManager(Set<String> projectNames) {
 
-        Map<String, Project> allProjects =
-                FileService.loadFromFile("database/projects.json", mapper, Project.class);
+        Map<String, Project> allProjects = FileService.loadFromFile("database/projects.json", mapper, Project.class);
 
         List<Project> managerProjects = projectNames.stream()
                 .map(allProjects::get)
@@ -109,6 +112,5 @@ public class ManagerService {
         return managerProjects.stream()
                 .collect(Collectors.groupingBy(Project::getStatus));
     }
-
 
 }
