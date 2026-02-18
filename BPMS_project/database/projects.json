@@ -1,26 +1,4 @@
 {
-  "pro1" : {
-    "name" : "pro1",
-    "description" : "pro1",
-    "taskList" : [ ],
-    "managerList" : [ ],
-    "clientName" : "cli1",
-    "status" : "NOT_APPROVED",
-    "startDate" : null,
-    "endDate" : null,
-    "id" : 1
-  },
-  "pro2" : {
-    "name" : "pro2",
-    "description" : "pro2",
-    "taskList" : [ ],
-    "managerList" : [ ],
-    "clientName" : "cli1",
-    "status" : "NOT_APPROVED",
-    "startDate" : null,
-    "endDate" : null,
-    "id" : 2
-  },
   "testCreate-1" : {
     "name" : "testCreate-1",
     "description" : "five floors,near highway",

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zeta.service.utility.Utility;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ProjectService {
@@ -45,14 +46,17 @@ public class ProjectService {
 
     }
 
-    public boolean approve(String projectName) {
+    public boolean approve(String projectName, LocalDate startDate, LocalDate endDate)
+            throws ProjectDoestNotExistException {
         projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
+        Utility.validateInput(projectName, "project name");
         if (!projectHashMap.containsKey(projectName)) {
-            throw new IllegalArgumentException("project does not exist");
+            throw new ProjectDoestNotExistException(projectName + " does not exist");
         }
         Project project = projectHashMap.get(projectName);
         project.setStatus(STATUS.UPCOMING);
+        project.setStartDate(startDate);
+        project.setEndDate(endDate);
         FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
         return true;
     }
@@ -67,12 +71,14 @@ public class ProjectService {
             throw new ProjectDoestNotExistException(projectName + " doesnt exist");
         }
         Project project = projectHashMap.get(projectName);
-        Manager manager;
         if (!userMap.containsKey(managerName)) {
-            throw new UserNotFoundException(managerName + " manager does not exist");
-        } else {
-            manager = (Manager) userMap.get(managerName);
+            throw new UserNotFoundException(managerName + " does not exist");
         }
+        User user = userMap.get(managerName);
+        if (user.getRole() != ROLE.MANAGER) {
+            throw new RoleMismatchException(managerName + " is not a Manager");
+        }
+        Manager manager = (Manager) user;
         project.getManagerList().add(managerName);
         manager.getProjectList().add(projectName);
         FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
@@ -119,6 +125,28 @@ public class ProjectService {
             }
         }
         return projectStatusMap;
+    }
+
+    public List<String> getUnapprovedProjects() {
+        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
+        List<String> unapprovedProjects = new ArrayList<>();
+        for (Map.Entry<String, Project> entry : projectHashMap.entrySet()) {
+            if (entry.getValue().getStatus() == STATUS.NOT_APPROVED) {
+                unapprovedProjects.add(entry.getKey());
+            }
+        }
+        return unapprovedProjects;
+    }
+
+    public List<String> getApprovedProjects() {
+        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
+        List<String> approvedProjects = new ArrayList<>();
+        for (Map.Entry<String, Project> entry : projectHashMap.entrySet()) {
+            if (entry.getValue().getStatus() != STATUS.NOT_APPROVED) {
+                approvedProjects.add(entry.getKey());
+            }
+        }
+        return approvedProjects;
     }
 
 }

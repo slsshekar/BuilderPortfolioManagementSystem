@@ -20,6 +20,12 @@ public class LoginUI {
         System.out.print("Enter password: ");
         String password = scanner.nextLine().trim();
 
+        if (username.equals("admin") && password.equals("admin")) {
+            System.out.println("Welcome Admin!");
+            AdminUI.show(scanner);
+            return;
+        }
+
         try {
             ROLE role = loginService.login(username, password);
 
