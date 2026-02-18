@@ -35,7 +35,6 @@ public class ManagerService {
             throw new RuntimeException("Project not found: " + projectName);
         }
 
-        // ✅ Validate manager assignment (correct domain validation)
         if (!project.getManagerList().contains(managerName)) {
             throw new RuntimeException("Manager not assigned to this project");
         }
@@ -47,10 +46,8 @@ public class ManagerService {
                 start,
                 end);
 
-        // update project task list
         project.getTaskList().add(taskName);
 
-        // update project status automatically
         if (project.getStatus() == STATUS.UPCOMING) {
             project.setStatus(STATUS.IN_PROGRESS);
         }
@@ -80,11 +77,9 @@ public class ManagerService {
 
         return project;
     }
-    // ================= GET ALL TASKS OF PROJECT =================
 
     public List<Task> getTasksOfProject(String projectName) {
 
-        // load all projects
         Map<String, Project> projectMap = projectDAO.load();
 
         Project project = projectMap.get(projectName);
@@ -93,10 +88,8 @@ public class ManagerService {
             throw new RuntimeException("Project not found: " + projectName);
         }
 
-        // get all tasks from task service
         Map<String, Task> allTasks = taskService.getAllTasks();
 
-        // convert task names -> task objects
         return project.getTaskList()
                 .stream()
                 .map(allTasks::get)

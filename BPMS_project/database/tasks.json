@@ -1,1 +1,13 @@
-{}
+{
+  "Database Setup" : {
+    "id" : 1,
+    "name" : "Database Setup",
+    "description" : "Sample description for Database Setup",
+    "projectName" : "Project Alpha",
+    "builderList" : [ ],
+    "managerName" : null,
+    "startDate" : null,
+    "endDate" : null,
+    "status" : "IN_PROGRESS"
+  }
+}

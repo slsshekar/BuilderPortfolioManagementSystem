@@ -18,20 +18,15 @@ import java.util.stream.Collectors;
 
 public class BuilderUI {
 
-    // ===== shared mapper =====
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    // ===== DAO layer =====
     private static final TaskDAO taskDAO = new TaskDAO(mapper);
     private static final UserDAO userDAO = new UserDAO(mapper);
 
-    // ===== service layer =====
     private static final TaskService taskService = new TaskService(taskDAO, userDAO);
     private static final TaskAssignmentService assignmentService = new TaskAssignmentService(taskDAO, userDAO);
-
-    // ================= MAIN UI =================
 
     public static void show(Scanner scanner, String builderName) {
 
@@ -56,8 +51,6 @@ public class BuilderUI {
         }
     }
 
-    // ================= MENU =================
-
     private static void printMenu() {
         System.out.println("\n=== Builder Menu ===");
         System.out.println("1. View All Assigned Tasks");
@@ -67,11 +60,6 @@ public class BuilderUI {
         System.out.print("Enter choice: ");
     }
 
-    // ================= FEATURES =================
-
-    /**
-     * Show all assigned tasks
-     */
     private static void viewAssignedTasks(String builderName) {
 
         Set<String> taskNames = assignmentService.getTasksOfBuilder(builderName);
@@ -85,9 +73,7 @@ public class BuilderUI {
         taskNames.forEach(t -> System.out.println("• " + t));
     }
 
-    /**
-     * Filter builder tasks by status
-     */
+
     private static void viewTasksByStatus(Scanner scanner, String builderName) {
 
         Set<String> assignedTasks = assignmentService.getTasksOfBuilder(builderName);
@@ -119,15 +105,12 @@ public class BuilderUI {
         filteredTasks.forEach(t -> System.out.println("• " + t.getName()));
     }
 
-    /**
-     * Show full task info
-     */
+
     private static void viewTaskDetails(Scanner scanner, String builderName) {
 
         System.out.print("Enter task name: ");
         String taskName = scanner.nextLine();
 
-        // ensure builder owns task
         if (!assignmentService.getTasksOfBuilder(builderName).contains(taskName)) {
             System.out.println("Task not assigned to you");
             return;
@@ -143,7 +126,6 @@ public class BuilderUI {
         printTask(task);
     }
 
-    // ================= HELPER =================
 
     private static void printTask(Task task) {
 

@@ -29,7 +29,6 @@ public class TestGetProjectListByManagerName {
         projectService = new ProjectService(projectDAO, userDAO);
     }
 
-    // ✅ VALID MANAGER
     @Test
     void testGetProjectListWithValidManagerName() throws Exception {
 
@@ -45,7 +44,6 @@ public class TestGetProjectListByManagerName {
         assertEquals(Set.of("testProject-2"), result);
     }
 
-    // ✅ USER NOT FOUND
     @Test
     void testGetProjectListWithInvalidUser() {
 
@@ -55,7 +53,6 @@ public class TestGetProjectListByManagerName {
                 () -> projectService.getProjectsByManagerName("invalid"));
     }
 
-    // ✅ INVALID INPUT
     @Test
     void testGetProjectListWithInvalidInput() {
 
@@ -63,7 +60,6 @@ public class TestGetProjectListByManagerName {
                 () -> projectService.getProjectsByManagerName(" "));
     }
 
-    // ✅ USER EXISTS BUT NOT MANAGER
     @Test
     void testGetProjectListWithNonManager() {
 

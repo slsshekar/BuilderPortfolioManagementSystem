@@ -1,7 +1,6 @@
 package AuthTest;
 
 import com.zeta.DAO.UserDAO;
-import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.model.*;
 import com.zeta.service.AuthService.Register;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +22,6 @@ public class RegisterTest {
         userDAO = mock(UserDAO.class);
         register = new Register(userDAO);
     }
-
-    // ================= SUCCESS CASES =================
 
     @Test
     void register_validManager_shouldCreateUser() throws Exception {
@@ -66,8 +63,6 @@ public class RegisterTest {
     }
 
 
-    // ================= VALIDATION TESTS =================
-
     @Test
     void register_nullUsername_shouldThrow() {
 
@@ -101,8 +96,6 @@ public class RegisterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> register.register("user", "1234", null));
     }
-
-    // ================= BUSINESS RULE TESTS =================
 
     @Test
     void register_duplicateUsername_shouldThrow() {

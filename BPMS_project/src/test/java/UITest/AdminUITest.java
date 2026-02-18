@@ -19,8 +19,6 @@ public class AdminUITest {
         System.setIn(originalIn);
     }
 
-    // ================= MENU PRINT TEST =================
-
     @Test
     void show_shouldDisplayMenu() {
 
@@ -39,8 +37,6 @@ public class AdminUITest {
         assertTrue(console.contains("Logout"));
     }
 
-    // ================= INVALID CHOICE =================
-
     @Test
     void show_invalidChoice_shouldPrintError() {
 
@@ -55,8 +51,6 @@ public class AdminUITest {
         assertTrue(output.toString().contains("Please enter a valid number"));
     }
 
-    // ================= LOGOUT =================
-
     @Test
     void show_logout_shouldExit() {
 
@@ -70,8 +64,6 @@ public class AdminUITest {
 
         assertTrue(output.toString().contains("Logged out successfully"));
     }
-
-    // ================= APPROVE PROJECT INVALID DATE =================
 
     @Test
     void approveProject_endDateBeforeStart_shouldShowError() {
@@ -92,8 +84,6 @@ public class AdminUITest {
 
         assertTrue(output.toString().contains("End date cannot be before start date"));
     }
-
-    // ================= ASSIGN MANAGER FLOW =================
 
     @Test
     void assignManager_shouldAskInputs() {

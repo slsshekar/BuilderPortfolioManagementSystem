@@ -27,7 +27,6 @@ public class TaskServiceUpdateTaskStatusTest {
         service = new TaskService(taskDAO, userDAO);
     }
 
-    // ✅ SUCCESS
     @Test
     void updateStatus_valid_shouldUpdate() {
 
@@ -41,7 +40,6 @@ public class TaskServiceUpdateTaskStatusTest {
         verify(taskDAO).save(any());
     }
 
-    // ❌ TASK NOT FOUND
     @Test
     void updateStatus_taskNotFound_shouldThrow() {
 

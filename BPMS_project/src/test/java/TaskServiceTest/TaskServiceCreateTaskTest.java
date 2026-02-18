@@ -28,7 +28,6 @@ public class TaskServiceCreateTaskTest {
         service = new TaskService(taskDAO, userDAO);
     }
 
-    // ✅ SUCCESS
     @Test
     void createTask_valid_shouldCreate() {
 
@@ -46,7 +45,6 @@ public class TaskServiceCreateTaskTest {
         verify(taskDAO).save(any());
     }
 
-    // ❌ NULL TASK NAME
     @Test
     void createTask_nullName_shouldThrow() {
 
@@ -62,7 +60,6 @@ public class TaskServiceCreateTaskTest {
                         LocalDate.now()));
     }
 
-    // ❌ BLANK TASK NAME
     @Test
     void createTask_blankName_shouldThrow() {
 
@@ -78,7 +75,6 @@ public class TaskServiceCreateTaskTest {
                         LocalDate.now()));
     }
 
-    // ❌ DUPLICATE TASK
     @Test
     void createTask_duplicate_shouldThrow() {
 

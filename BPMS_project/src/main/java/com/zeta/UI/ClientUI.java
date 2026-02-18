@@ -93,7 +93,6 @@ public class ClientUI {
                 return;
             }
 
-            // Group projects by status
             Map<STATUS, List<String>> grouped = new LinkedHashMap<>();
             for (STATUS s : STATUS.values()) {
                 grouped.put(s, new ArrayList<>());

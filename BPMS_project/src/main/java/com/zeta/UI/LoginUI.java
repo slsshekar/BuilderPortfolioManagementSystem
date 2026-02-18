@@ -34,7 +34,6 @@ public class LoginUI {
         System.out.print("Enter password: ");
         String password = scanner.nextLine().trim();
 
-        // special admin login (system user)
         if (isAdmin(username, password)) {
             System.out.println("Welcome Admin!");
             AdminUI.show(scanner);
@@ -49,8 +48,6 @@ public class LoginUI {
             System.out.println("Login failed: " + e.getMessage());
         }
     }
-
-    // ================= HELPER METHODS =================
 
     private static boolean isAdmin(String username, String password) {
         return username.equals("admin") && password.equals("admin");

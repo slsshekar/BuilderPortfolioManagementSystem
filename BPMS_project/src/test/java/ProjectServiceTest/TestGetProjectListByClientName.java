@@ -6,7 +6,6 @@ import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.Client;
 import com.zeta.model.Manager;
 import com.zeta.model.ROLE;
-import com.zeta.model.User;
 import com.zeta.service.ProjectService.ProjectService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,6 @@ public class TestGetProjectListByClientName {
         projectService = new ProjectService(projectDAO, userDAO);
     }
 
-    // ✅ VALID CLIENT
     @Test
     void testGetProjectListWithValidClientName() throws Exception {
 
@@ -46,7 +44,6 @@ public class TestGetProjectListByClientName {
         assertEquals(Set.of("testProject-1"), result);
     }
 
-    // ✅ USER NOT FOUND
     @Test
     void testGetProjectListWithInvalidUser() {
 
@@ -56,7 +53,6 @@ public class TestGetProjectListByClientName {
                 () -> projectService.getProjectsByClientName("invalid"));
     }
 
-    // ✅ INVALID INPUT (blank name)
     @Test
     void testGetProjectListWithInvalidInput() {
 
@@ -64,7 +60,6 @@ public class TestGetProjectListByClientName {
                 () -> projectService.getProjectsByClientName(" "));
     }
 
-    // ✅ USER EXISTS BUT NOT CLIENT
     @Test
     void testGetProjectListWithNonClient() {
 

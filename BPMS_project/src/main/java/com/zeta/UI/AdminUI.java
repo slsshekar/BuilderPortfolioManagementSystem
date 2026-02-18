@@ -32,7 +32,6 @@ public class AdminUI {
     // ---------- Service Layer ----------
     private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
 
-    // ================= MAIN MENU =================
 
     public static void show(Scanner scanner) {
 
@@ -55,8 +54,6 @@ public class AdminUI {
         }
     }
 
-    // ================= MENU =================
-
     private static void printMenu() {
         System.out.println("\n=== Admin Menu ===");
         System.out.println("1. Show all unapproved projects");
@@ -67,7 +64,6 @@ public class AdminUI {
         System.out.print("Enter your choice: ");
     }
 
-    // ================= SHOW UNAPPROVED =================
 
     private static void showUnapprovedProjects() {
 
@@ -84,7 +80,6 @@ public class AdminUI {
         }
     }
 
-    // ================= SHOW APPROVED =================
 
     private static void showApprovedProjects() {
 
@@ -101,7 +96,6 @@ public class AdminUI {
         }
     }
 
-    // ================= APPROVE PROJECT =================
 
     private static void approveProject(Scanner scanner) {
 
@@ -130,8 +124,6 @@ public class AdminUI {
             System.out.println("Approval failed: " + e.getMessage());
         }
     }
-
-    // ================= ASSIGN MANAGER =================
 
     private static void assignManager(Scanner scanner) {
 

@@ -30,12 +30,9 @@ public class MainTest {
         return out.toString();
     }
 
-    // ================= STARTUP TEST =================
-
     @Test
     void main_shouldShowWelcomeMessage() {
 
-        // choose exit immediately
         String console = runMain("3\n");
 
         assertTrue(console.contains("Welcome to Builder Portfolio Management System"));
@@ -43,14 +40,9 @@ public class MainTest {
         assertTrue(console.contains("Exiting the application"));
     }
 
-    // ================= REGISTER FLOW =================
-
     @Test
     void main_registerFlow_shouldOpenRegisterMenu() {
 
-        // 1 -> Register
-        // 4 -> Back
-        // 3 -> Exit
         String console = runMain("""
                 1
                 4
@@ -60,14 +52,9 @@ public class MainTest {
         assertTrue(console.contains("Register Menu"));
     }
 
-    // ================= LOGIN FLOW =================
-
     @Test
     void main_loginFlow_shouldOpenLogin() {
 
-        // 2 -> Login
-        // give fake login
-        // 3 -> exit
         String console = runMain("""
                 2
                 user

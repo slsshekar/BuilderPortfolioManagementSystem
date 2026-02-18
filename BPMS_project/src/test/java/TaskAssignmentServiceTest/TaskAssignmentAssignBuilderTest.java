@@ -28,7 +28,6 @@ public class TaskAssignmentAssignBuilderTest {
         service = new TaskAssignmentService(taskDAO, userDAO);
     }
 
-    // ✅ SUCCESS
     @Test
     void assignBuilder_valid_shouldAssign() {
 
@@ -50,7 +49,6 @@ public class TaskAssignmentAssignBuilderTest {
         verify(userDAO).save(any());
     }
 
-    // ❌ TASK NOT FOUND
     @Test
     void assignBuilder_taskNotFound_shouldThrow() {
 
@@ -60,7 +58,6 @@ public class TaskAssignmentAssignBuilderTest {
                 () -> service.assignBuilderToTask("task1", "builder"));
     }
 
-    // ❌ USER NOT FOUND
     @Test
     void assignBuilder_userNotFound_shouldThrow() {
 
@@ -74,7 +71,6 @@ public class TaskAssignmentAssignBuilderTest {
                 () -> service.assignBuilderToTask("task1", "builder"));
     }
 
-    // ❌ NOT A BUILDER
     @Test
     void assignBuilder_invalidRole_shouldThrow() {
 
@@ -90,7 +86,6 @@ public class TaskAssignmentAssignBuilderTest {
                 () -> service.assignBuilderToTask("task1", "x"));
     }
 
-    // ❌ DUPLICATE BUILDER
     @Test
     void assignBuilder_alreadyAssigned_shouldThrow() {
 

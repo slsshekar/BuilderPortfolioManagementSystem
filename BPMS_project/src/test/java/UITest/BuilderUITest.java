@@ -20,8 +20,6 @@ public class BuilderUITest {
         System.setIn(originalIn);
     }
 
-    // ================= MENU DISPLAY =================
-
     @Test
     void show_shouldDisplayMenu() {
 
@@ -40,8 +38,6 @@ public class BuilderUITest {
         assertTrue(console.contains("Logout"));
     }
 
-    // ================= INVALID CHOICE =================
-
     @Test
     void show_invalidChoice_shouldPrintError() {
 
@@ -56,8 +52,6 @@ public class BuilderUITest {
         assertTrue(output.toString().contains("Invalid choice"));
     }
 
-    // ================= LOGOUT =================
-
     @Test
     void show_logout_shouldExit() {
 
@@ -71,8 +65,6 @@ public class BuilderUITest {
 
         assertTrue(output.toString().contains("Logging out"));
     }
-
-    // ================= VIEW ASSIGNED TASKS FLOW =================
 
     @Test
     void viewAssignedTasks_shouldExecuteFlow() {
@@ -90,14 +82,11 @@ public class BuilderUITest {
 
         String console = output.toString();
 
-        // since DB may be empty → expect either
         assertTrue(
                 console.contains("Your Tasks") ||
                         console.contains("No tasks assigned")
         );
     }
-
-    // ================= VIEW TASKS BY STATUS FLOW =================
 
     @Test
     void viewTasksByStatus_shouldAskForStatus() {
@@ -119,8 +108,6 @@ public class BuilderUITest {
         assertTrue(console.contains("Available Status") ||
                 console.contains("No tasks assigned"));
     }
-
-    // ================= VIEW TASK DETAILS FLOW =================
 
     @Test
     void viewTaskDetails_shouldAskTaskName() {

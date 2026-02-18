@@ -1,13 +1,24 @@
 {
-  "project" : {
-    "name" : "project",
-    "description" : "project",
-    "taskList" : [ "task" ],
-    "managerList" : [ "manager" ],
-    "clientName" : "client",
+  "Project Beta" : {
+    "name" : "Project Beta",
+    "description" : "Description for Project Beta",
+    "taskList" : [ "Task B" ],
+    "managerList" : [ ],
+    "clientName" : null,
     "status" : "IN_PROGRESS",
-    "startDate" : "2019-10-21",
-    "endDate" : "2020-10-22",
-    "id" : 1
+    "startDate" : null,
+    "endDate" : null,
+    "id" : 0
+  },
+  "Project Alpha" : {
+    "name" : "Project Alpha",
+    "description" : "Description for Project Alpha",
+    "taskList" : [ "Task A" ],
+    "managerList" : [ ],
+    "clientName" : null,
+    "status" : "IN_PROGRESS",
+    "startDate" : null,
+    "endDate" : null,
+    "id" : 0
   }
 }

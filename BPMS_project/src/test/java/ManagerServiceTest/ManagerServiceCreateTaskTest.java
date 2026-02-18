@@ -27,7 +27,6 @@ public class ManagerServiceCreateTaskTest {
         service = new ManagerService(projectDAO, taskService);
     }
 
-    // ✅ SUCCESS CASE
     @Test
     void createTask_valid_shouldCreateTaskAndUpdateProject() {
 
@@ -51,7 +50,6 @@ public class ManagerServiceCreateTaskTest {
         assertEquals(STATUS.IN_PROGRESS, project.getStatus());
     }
 
-    // ❌ PROJECT NOT FOUND
     @Test
     void createTask_projectNotFound_shouldThrow() {
 
@@ -62,7 +60,6 @@ public class ManagerServiceCreateTaskTest {
                         "manager", LocalDate.now(), LocalDate.now()));
     }
 
-    // ❌ MANAGER NOT ASSIGNED
     @Test
     void createTask_managerNotAssigned_shouldThrow() {
 

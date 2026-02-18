@@ -26,12 +26,9 @@ public class LoginTests {
         login = new Login(userDAO);
     }
 
-    // ================= VALID LOGIN =================
-
     @Test
     void login_validCredentials_shouldReturnRole() throws Exception {
 
-        // mock abstract class
         User user = mock(User.class);
 
         when(user.getPassword()).thenReturn("1234");
@@ -45,8 +42,6 @@ public class LoginTests {
         verify(userDAO).load();
     }
 
-    // ================= USER NOT FOUND =================
-
     @Test
     void login_userNotFound_shouldThrowException() {
 
@@ -55,8 +50,6 @@ public class LoginTests {
         assertThrows(UserNotFoundException.class,
                 () -> login.login("unknown", "1234"));
     }
-
-    // ================= WRONG PASSWORD =================
 
     @Test
     void login_wrongPassword_shouldThrowException() {
@@ -70,15 +63,11 @@ public class LoginTests {
                 () -> login.login("john", "wrong"));
     }
 
-    // ================= INVALID USERNAME =================
-
     @Test
     void login_blankUsername_shouldThrowIllegalArgument() {
         assertThrows(IllegalArgumentException.class,
                 () -> login.login(" ", "1234"));
     }
-
-    // ================= INVALID PASSWORD =================
 
     @Test
     void login_blankPassword_shouldThrowIllegalArgument() {
