@@ -1,49 +1,58 @@
 package ProjectServiceTest;
 
-import com.zeta.Exceptions.ProjectServiceException.ClientDoesNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectAlreadyExistsException;
+import com.zeta.DAO.ProjectDAO;
+import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.ProjectServiceException.ProjectDoestNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.model.Project;
-import com.zeta.model.ROLE;
-import com.zeta.service.AuthService.Register;
 import com.zeta.service.ProjectService.ProjectService;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class TestApprove {
-    ProjectService projectService;
 
-    @BeforeAll
-    static void init() throws RoleMismatchException, ProjectAlreadyExistsException, ClientDoesNotExistException {
-        Register register = new Register();
-        register.register("approveClient", "1234", ROLE.CLIENT);
-        Project project = new Project("testApprove-1", "test aprrove description", LocalDate.of(2026, 9, 12),
-                LocalDate.of(2028, 9, 10));
-        ProjectService projectService = new ProjectService();
-        projectService.create(project, "approveClient");
-    }
+    private ProjectDAO projectDAO;
+    private UserDAO userDAO;
+    private ProjectService service;
 
     @BeforeEach
     void setup() {
-        projectService = new ProjectService();
+        projectDAO = mock(ProjectDAO.class);
+        userDAO = mock(UserDAO.class);
+        service = new ProjectService(projectDAO, userDAO);
     }
 
     @Test
-    void testValidProjectApproval() throws ProjectDoestNotExistException {
-        assertTrue(projectService.approve("testApprove-1", LocalDate.of(2026, 9, 12), LocalDate.of(2028, 9, 10)));
+    void approve_validProject_shouldSucceed() throws Exception {
+
+        Project project = new Project();
+        Map<String, Project> map = new HashMap<>();
+        map.put("P1", project);
+
+        when(projectDAO.load()).thenReturn(map);
+
+        boolean result = service.approve("P1",
+                LocalDate.now(),
+                LocalDate.now().plusDays(1));
+
+        assertTrue(result);
+        verify(projectDAO).save(map);
     }
 
     @Test
-    void testInvalidProjectApproval() {
-        assertThrowsExactly(ProjectDoestNotExistException.class,
-                () -> projectService.approve("test case 1", LocalDate.of(2026, 1, 1), LocalDate.of(2027, 1, 1)));
-    }
+    void approve_projectNotFound_shouldThrow() {
 
+        when(projectDAO.load()).thenReturn(new HashMap<>());
+
+        assertThrows(ProjectDoestNotExistException.class,
+                () -> service.approve("P1",
+                        LocalDate.now(),
+                        LocalDate.now()));
+    }
 }

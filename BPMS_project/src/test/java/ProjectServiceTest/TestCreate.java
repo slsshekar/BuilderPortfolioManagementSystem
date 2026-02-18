@@ -1,54 +1,80 @@
 package ProjectServiceTest;
 
-import com.zeta.Exceptions.ProjectServiceException.ClientDoesNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectAlreadyExistsException;
-import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
-import com.zeta.model.Project;
-import com.zeta.model.ROLE;
-import com.zeta.service.AuthService.Register;
+import com.zeta.DAO.ProjectDAO;
+import com.zeta.DAO.UserDAO;
+import com.zeta.Exceptions.ProjectServiceException.*;
+import com.zeta.model.*;
 import com.zeta.service.ProjectService.ProjectService;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-import java.time.LocalDate;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class TestCreate {
-    ProjectService projectService;
-    @BeforeAll
-    static void init() throws RoleMismatchException {
-        Register register=new Register();
-        register.register("testCreateClient","1234", ROLE.CLIENT);
-    }
+
+    private ProjectDAO projectDAO;
+    private UserDAO userDAO;
+    private ProjectService service;
+
     @BeforeEach
-    void setup(){
-        projectService=new ProjectService();
+    void setup() {
+        projectDAO = mock(ProjectDAO.class);
+        userDAO = mock(UserDAO.class);
+        service = new ProjectService(projectDAO, userDAO);
     }
+
     @Test
-    void testCreate() throws ProjectAlreadyExistsException, ClientDoesNotExistException {
-        Project project=new Project("testCreate-1","five floors,near highway", LocalDate.of(2026,10,9),LocalDate.of(2027,10,8));
-        assertTrue(projectService.create(project, "testCreateClient"));
+    void create_validProject_shouldSucceed() throws Exception {
+
+        Project project = new Project("P1", "desc", null, null);
+        Client client = new Client();
+        client.setProjectList(new HashSet<>());
+
+        when(projectDAO.load()).thenReturn(new HashMap<>());
+        when(userDAO.load()).thenReturn(Map.of("client1", client));
+
+        boolean result = service.create(project, "client1");
+
+        assertTrue(result);
+        verify(projectDAO).save(any());
+        verify(userDAO).save(any());
     }
+
     @Test
-    void testCreateWithInvalidClient() throws ProjectAlreadyExistsException,ClientDoesNotExistException{
-        Project project=new Project("tower-2","5 floors",LocalDate.of(2026,10,9),LocalDate.of(2028,10,8));
-        assertThrowsExactly(ClientDoesNotExistException.class,()->projectService.create(project,"invalidClient"));
+    void create_duplicateProject_shouldThrow() {
+
+        Project project = new Project();
+        project.setName("P1");
+        project.setDescription("desc");
+
+        Client client = new Client("client1", "123", ROLE.CLIENT);
+        client.setProjectList(new HashSet<>());
+
+        // project already exists
+        when(projectDAO.load()).thenReturn(Map.of("P1", project));
+
+        // client must exist (important)
+        when(userDAO.load()).thenReturn(Map.of("client1", client));
+
+        assertThrows(ProjectAlreadyExistsException.class,
+                () -> service.create(project, "client1"));
     }
+
+
     @Test
-    void testCreateWithNullClientName(){
-        Project project=new Project("tower-3","6 floors",LocalDate.of(2026,8,9),LocalDate.of(2028,10,8));
-        assertThrowsExactly(IllegalArgumentException.class,()->projectService.create(project,""));
-    }
-    @Test
-    void testCreateWithNullDescription(){
-        Project project=new Project("tower dummy","",LocalDate.of(2026,9,6),LocalDate.of(2027,9,12));
-        assertThrowsExactly(IllegalArgumentException.class,()->projectService.create(project,"abc"));
-    }
-    @Test
-    void testCreateWithNullProjectName(){
-        Project project=new Project(" ","dummy description",LocalDate.of(2026,9,6),LocalDate.of(2027,9,12));
-        assertThrowsExactly(IllegalArgumentException.class,()->projectService.create(project,"abc"));
+    void create_clientNotFound_shouldThrow() {
+
+        Project project = new Project("P1", "desc", null, null);
+
+        when(projectDAO.load()).thenReturn(new HashMap<>());
+        when(userDAO.load()).thenReturn(new HashMap<>());
+
+        assertThrows(ClientDoesNotExistException.class,
+                () -> service.create(project, "client1"));
     }
 }

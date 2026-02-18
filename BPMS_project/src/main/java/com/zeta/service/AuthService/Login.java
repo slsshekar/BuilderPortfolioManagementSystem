@@ -1,36 +1,39 @@
 package com.zeta.service.AuthService;
 
-import com.zeta.service.FileService.FileService;
+import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.ROLE;
 import com.zeta.model.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.service.utility.Utility;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Login {
 
-    private static final String FILE_NAME = "database/users.json";
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static Map<String, User> userList = new HashMap<>();
+    private final UserDAO userDAO;
+    public Login(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
-    public ROLE login(String username, String password) throws UserNotFoundException, InvalidPasswordException {
+    public ROLE login(String username, String password)
+            throws UserNotFoundException, InvalidPasswordException {
 
         Utility.validateInput(username, "Username");
         Utility.validateInput(password, "Password");
 
-        userList = FileService.loadFromFile(FILE_NAME, mapper, User.class);
-        if (!userList.containsKey(username)) {
-            throw new UserNotFoundException("User not found: " + username);
-        }
+        Map<String, User> userList = userDAO.load();
 
         User user = userList.get(username);
 
+        if (user == null) {
+            throw new UserNotFoundException("User not found: " + username);
+        }
+
         if (!user.getPassword().equals(password)) {
-            throw new InvalidPasswordException("Invalid password for user: " + username);
+            throw new InvalidPasswordException(
+                    "Invalid password for user: " + username
+            );
         }
 
         return user.getRole();

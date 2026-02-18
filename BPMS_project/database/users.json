@@ -1,23 +1,23 @@
 {
   "manager" : {
-    "id" : 1,
+    "id" : 6,
     "name" : "manager",
     "password" : "manager",
     "role" : "MANAGER",
-    "projectList" : [ "project" ]
+    "projectList" : [ "p1" ]
   },
   "builder" : {
-    "id" : 20,
+    "id" : 11,
     "name" : "builder",
     "password" : "builder",
     "role" : "BUILDER",
-    "taskList" : [ "task" ]
+    "taskList" : [ ]
   },
   "client" : {
-    "id" : 3,
+    "id" : 1,
     "name" : "client",
     "password" : "client",
     "role" : "CLIENT",
-    "projectList" : [ "project" ]
+    "projectList" : [ "p1" ]
   }
 }

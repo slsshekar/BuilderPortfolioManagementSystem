@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileService {
-
-    // Resolves file path relative to the project root (where pom.xml lives).
     private static File getProjectFile(String relativePath) {
         File file = new File(relativePath);
         if (file.exists()) {
@@ -40,7 +38,6 @@ public class FileService {
         return file;
     }
 
-    // LOAD MAP<String, T>
     public static <T> Map<String, T> loadFromFile(
             String fileName,
             ObjectMapper mapper,
@@ -48,16 +45,11 @@ public class FileService {
 
         try {
             File file = getProjectFile(fileName);
-
-            // if file not present or empty → return empty map
             if (!file.exists() || file.length() == 0) {
                 return new HashMap<>();
             }
 
-            return mapper.readValue(
-                    file,
-                    mapper.getTypeFactory()
-                            .constructMapType(HashMap.class, String.class, clazz));
+            return mapper.readValue(file, mapper.getTypeFactory().constructMapType(HashMap.class, String.class, clazz));
 
         } catch (IOException e) {
             System.out.println("Error loading data: " + e.getMessage());
@@ -65,7 +57,6 @@ public class FileService {
         }
     }
 
-    // SAVE MAP<String, T>
     public static <T> void saveToFile(
             Map<String, T> objectsList,
             String fileName,
@@ -73,10 +64,8 @@ public class FileService {
 
         try {
             File file = getProjectFile(fileName);
-            // Ensure parent directory exists
             file.getParentFile().mkdirs();
-            mapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(file, objectsList);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, objectsList);
 
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());

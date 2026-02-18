@@ -1,153 +1,189 @@
 package com.zeta.service.ProjectService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
-import com.zeta.Exceptions.ProjectServiceException.ClientDoesNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectAlreadyExistsException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectDoestNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
+import com.zeta.Exceptions.ProjectServiceException.*;
 import com.zeta.model.*;
-import com.zeta.service.FileService.FileService;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.zeta.DAO.ProjectDAO;
+import com.zeta.DAO.UserDAO;
 import com.zeta.service.utility.Utility;
 
 import java.time.LocalDate;
 import java.util.*;
 
 public class ProjectService {
-    private static final String FILE_NAME = "database/projects.json";
-    private static final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    Map<String, Project> projectHashMap = new HashMap<>();
-    Map<String, User> userMap = new HashMap<>();
+
+    private final ProjectDAO projectDAO;
+    private final UserDAO userDAO;
+
+    public ProjectService(ProjectDAO projectDAO, UserDAO userDAO) {
+        this.projectDAO = projectDAO;
+        this.userDAO = userDAO;
+    }
 
     public boolean create(Project project, String clientName)
             throws ProjectAlreadyExistsException, ClientDoesNotExistException {
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
+
+        Map<String, Project> projectMap = projectDAO.load();
+        Map<String, User> userMap = userDAO.load();
+
         Utility.validateInput(project.getName(), "project name");
         Utility.validateInput(project.getDescription(), "project description");
         Utility.validateInput(clientName, "client name");
+
         if (!userMap.containsKey(clientName)) {
-            throw new ClientDoesNotExistException(clientName + " doesnt exist");
+            throw new ClientDoesNotExistException(clientName + " doesn't exist");
         }
-        if (projectHashMap.containsKey(project.getName())) {
-            throw new ProjectAlreadyExistsException(project.getName() + " already exists!");
+
+        if (projectMap.containsKey(project.getName())) {
+            throw new ProjectAlreadyExistsException(project.getName() + " already exists");
         }
+
         project.setClientName(clientName);
-        projectHashMap.put(project.getName(), project);
+        projectMap.put(project.getName(), project);
+
         Client client = (Client) userMap.get(clientName);
         client.getProjectList().add(project.getName());
-        FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
-        FileService.saveToFile(userMap, "database/users.json", mapper);
-        return projectHashMap.containsKey(project.getName());
 
+        projectDAO.save(projectMap);
+        userDAO.save(userMap);
+
+        return true;
     }
+
 
     public boolean approve(String projectName, LocalDate startDate, LocalDate endDate)
             throws ProjectDoestNotExistException {
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
+
+        Map<String, Project> projectMap = projectDAO.load();
+
         Utility.validateInput(projectName, "project name");
-        if (!projectHashMap.containsKey(projectName)) {
+
+        Project project = projectMap.get(projectName);
+
+        if (project == null) {
             throw new ProjectDoestNotExistException(projectName + " does not exist");
         }
-        Project project = projectHashMap.get(projectName);
+
         project.setStatus(STATUS.UPCOMING);
         project.setStartDate(startDate);
         project.setEndDate(endDate);
-        FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
+
+        projectDAO.save(projectMap);
+
         return true;
     }
+
 
     public boolean assignManager(String projectName, String managerName)
             throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
+
+        Map<String, Project> projectMap = projectDAO.load();
+        Map<String, User> userMap = userDAO.load();
+
         Utility.validateInput(projectName, "project name");
         Utility.validateInput(managerName, "manager name");
-        if (!projectHashMap.containsKey(projectName)) {
-            throw new ProjectDoestNotExistException(projectName + " doesnt exist");
+
+        Project project = projectMap.get(projectName);
+        if (project == null) {
+            throw new ProjectDoestNotExistException(projectName + " doesn't exist");
         }
-        Project project = projectHashMap.get(projectName);
-        if (!userMap.containsKey(managerName)) {
+
+        User user = userMap.get(managerName);
+        if (user == null) {
             throw new UserNotFoundException(managerName + " does not exist");
         }
-        User user = userMap.get(managerName);
+
         if (user.getRole() != ROLE.MANAGER) {
-            throw new RoleMismatchException(managerName + " is not a Manager");
+            throw new RoleMismatchException(managerName + " is not a manager");
         }
+
         Manager manager = (Manager) user;
+
         project.getManagerList().add(managerName);
         manager.getProjectList().add(projectName);
-        FileService.saveToFile(projectHashMap, FILE_NAME, mapper);
-        FileService.saveToFile(userMap, "database/users.json", mapper);
-        return true;
 
+        projectDAO.save(projectMap);
+        userDAO.save(userMap);
+
+        return true;
     }
 
-    public Set<String> getProjectsByClientName(String clientName) throws UserNotFoundException {
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
-        Client client;
+    public Set<String> getProjectsByClientName(String clientName)
+            throws UserNotFoundException {
+
+        Map<String, User> userMap = userDAO.load();
+
         Utility.validateInput(clientName, "client name");
-        if (!userMap.containsKey(clientName)) {
+
+        User user = userMap.get(clientName);
+
+        if (!(user instanceof Client client)) {
             throw new UserNotFoundException(clientName + " does not exist");
         }
-        client = (Client) userMap.get(clientName);
-        return client.getProjectList();
 
+        return client.getProjectList();
     }
 
-    public Set<String> getProjectsByManagerName(String managerName) throws UserNotFoundException {
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
-        Manager manager;
+
+    public Set<String> getProjectsByManagerName(String managerName)
+            throws UserNotFoundException {
+
+        Map<String, User> userMap = userDAO.load();
+
         Utility.validateInput(managerName, "manager name");
-        if (!userMap.containsKey(managerName)) {
+
+        User user = userMap.get(managerName);
+
+        if (!(user instanceof Manager manager)) {
             throw new UserNotFoundException(managerName + " does not exist");
         }
-        manager = (Manager) userMap.get(managerName);
+
         return manager.getProjectList();
     }
 
-    public Map<String, STATUS> getProjectStatusByClient(String clientName) throws UserNotFoundException {
-        userMap = FileService.loadFromFile("database/users.json", mapper, User.class);
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        Utility.validateInput(clientName, "client name");
-        if (!userMap.containsKey(clientName)) {
+
+    public Map<String, STATUS> getProjectStatusByClient(String clientName)
+            throws UserNotFoundException {
+
+        Map<String, User> userMap = userDAO.load();
+        Map<String, Project> projectMap = projectDAO.load();
+
+        User user = userMap.get(clientName);
+
+        if (!(user instanceof Client client)) {
             throw new UserNotFoundException(clientName + " does not exist");
         }
-        Client client = (Client) userMap.get(clientName);
-        Map<String, STATUS> projectStatusMap = new HashMap<>();
+
+        Map<String, STATUS> result = new HashMap<>();
+
         for (String projectName : client.getProjectList()) {
-            if (projectHashMap.containsKey(projectName)) {
-                projectStatusMap.put(projectName, projectHashMap.get(projectName).getStatus());
+            Project project = projectMap.get(projectName);
+            if (project != null) {
+                result.put(projectName, project.getStatus());
             }
         }
-        return projectStatusMap;
+
+        return result;
     }
 
+
     public List<String> getUnapprovedProjects() {
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        List<String> unapprovedProjects = new ArrayList<>();
-        for (Map.Entry<String, Project> entry : projectHashMap.entrySet()) {
-            if (entry.getValue().getStatus() == STATUS.NOT_APPROVED) {
-                unapprovedProjects.add(entry.getKey());
-            }
-        }
-        return unapprovedProjects;
+
+        Map<String, Project> projectMap = projectDAO.load();
+
+        return projectMap.entrySet().stream()
+                .filter(e -> e.getValue().getStatus() == STATUS.NOT_APPROVED)
+                .map(Map.Entry::getKey)
+                .toList();
     }
 
     public List<String> getApprovedProjects() {
-        projectHashMap = FileService.loadFromFile(FILE_NAME, mapper, Project.class);
-        List<String> approvedProjects = new ArrayList<>();
-        for (Map.Entry<String, Project> entry : projectHashMap.entrySet()) {
-            if (entry.getValue().getStatus() != STATUS.NOT_APPROVED) {
-                approvedProjects.add(entry.getKey());
-            }
-        }
-        return approvedProjects;
-    }
-    
 
+        Map<String, Project> projectMap = projectDAO.load();
+
+        return projectMap.entrySet().stream()
+                .filter(e -> e.getValue().getStatus() != STATUS.NOT_APPROVED)
+                .map(Map.Entry::getKey)
+                .toList();
+    }
 }

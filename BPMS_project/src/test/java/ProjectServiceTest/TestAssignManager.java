@@ -1,68 +1,83 @@
 package ProjectServiceTest;
 
+import com.zeta.DAO.ProjectDAO;
+import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
-import com.zeta.Exceptions.ProjectServiceException.ClientDoesNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectAlreadyExistsException;
-import com.zeta.Exceptions.ProjectServiceException.ProjectDoestNotExistException;
-import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
-import com.zeta.model.Project;
-import com.zeta.model.ROLE;
-import com.zeta.service.AuthService.Register;
+import com.zeta.Exceptions.ProjectServiceException.*;
+import com.zeta.model.*;
 import com.zeta.service.ProjectService.ProjectService;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class TestAssignManager {
-    ProjectService projectService;
 
-    @BeforeAll
-    static void init() throws RoleMismatchException, ProjectAlreadyExistsException, ClientDoesNotExistException {
-        Register register = new Register();
-        register.register("assignManager", "1234", ROLE.MANAGER);
-        register.register("assignManager2", "1234", ROLE.MANAGER);
-        register.register("assignClient", "1234", ROLE.CLIENT);
-        Project project = new Project("testAssign-1", "test assign description", LocalDate.of(2026, 9, 12),
-                LocalDate.of(2028, 9, 10));
-        ProjectService projectService = new ProjectService();
-        projectService.create(project, "assignClient");
-    }
+    private ProjectDAO projectDAO;
+    private UserDAO userDAO;
+    private ProjectService service;
 
     @BeforeEach
     void setup() {
-        projectService = new ProjectService();
+        projectDAO = mock(ProjectDAO.class);
+        userDAO = mock(UserDAO.class);
+        service = new ProjectService(projectDAO, userDAO);
     }
 
     @Test
-    void testAssignManagerWithValidInputs()
-            throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
-        assertTrue(projectService.assignManager("testAssign-1", "assignManager"));
+    void assignManager_valid_shouldSucceed() throws Exception {
+
+        Project project = new Project();
+        project.setManagerList(new HashSet<>());
+
+        // ✅ use constructor
+        Manager manager = new Manager("manager1", "pass", ROLE.MANAGER);
+        manager.setProjectList(new HashSet<>());
+
+        when(projectDAO.load()).thenReturn(Map.of("P1", project));
+        when(userDAO.load()).thenReturn(Map.of("manager1", manager));
+
+        boolean result = service.assignManager("P1", "manager1");
+
+        assertTrue(result);
+        verify(projectDAO).save(any());
+        verify(userDAO).save(any());
     }
 
     @Test
-    void testAssignManagerWithInvalidProject() {
-        assertThrowsExactly(ProjectDoestNotExistException.class, () -> projectService.assignManager("tower", "abc"));
+    void assignManager_projectNotFound_shouldThrow() {
+
+        when(projectDAO.load()).thenReturn(new HashMap<>());
+
+        assertThrows(ProjectDoestNotExistException.class,
+                () -> service.assignManager("P1", "m"));
     }
 
     @Test
-    void testAssignInvalidManager() {
-        assertThrowsExactly(UserNotFoundException.class, () -> projectService.assignManager("testAssign-1", "xyz"));
+    void assignManager_userNotFound_shouldThrow() {
+
+        when(projectDAO.load()).thenReturn(Map.of("P1", new Project()));
+        when(userDAO.load()).thenReturn(new HashMap<>());
+
+        assertThrows(UserNotFoundException.class,
+                () -> service.assignManager("P1", "m"));
     }
 
     @Test
-    void testAssignNonManager() {
-        assertThrowsExactly(RoleMismatchException.class,
-                () -> projectService.assignManager("testAssign-1", "assignClient"));
-    }
+    void assignManager_wrongRole_shouldThrow() {
 
-    @Test
-    void testAssignMultipleManagers()
-            throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
-        assertTrue(projectService.assignManager("testAssign-1", "assignManager2"));
+        // mock user with wrong role
+        User user = mock(User.class);
+        when(user.getRole()).thenReturn(ROLE.CLIENT);
+
+        when(projectDAO.load()).thenReturn(Map.of("P1", new Project()));
+        when(userDAO.load()).thenReturn(Map.of("m", user));
+
+        assertThrows(RoleMismatchException.class,
+                () -> service.assignManager("P1", "m"));
     }
 }

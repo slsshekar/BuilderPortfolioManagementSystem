@@ -1,19 +1,32 @@
 package com.zeta.UI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Login;
-import com.zeta.UI.ManagerUI;
 
 import java.util.Scanner;
 
 public class LoginUI {
 
-    public static void show(Scanner scanner) {
-        Login loginService = new Login();
+    // create mapper once
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        System.out.println("\n Login : ");
+    // DAO layer
+    private static final UserDAO userDAO = new UserDAO(mapper);
+
+    // service layer
+    private static final Login loginService = new Login(userDAO);
+
+    public static void show(Scanner scanner) {
+
+        System.out.println("\n=== Login ===");
 
         System.out.print("Enter username: ");
         String username = scanner.nextLine().trim();
@@ -21,7 +34,8 @@ public class LoginUI {
         System.out.print("Enter password: ");
         String password = scanner.nextLine().trim();
 
-        if (username.equals("admin") && password.equals("admin")) {
+        // special admin login (system user)
+        if (isAdmin(username, password)) {
             System.out.println("Welcome Admin!");
             AdminUI.show(scanner);
             return;
@@ -29,27 +43,39 @@ public class LoginUI {
 
         try {
             ROLE role = loginService.login(username, password);
+            routeUser(role, scanner, username);
 
-            switch (role) {
-                case CLIENT:
-                    System.out.println("Welcome Client!");
-                    ClientUI.show(scanner, username);
-                    break;
-                case BUILDER:
-                    System.out.println("Welcome Builder!");
-                    break;
-                case MANAGER:
-                    System.out.println("Welcome Manager!");
-                    ManagerUI.show(scanner,username);
-                    break;
-                default:
-                    System.out.println("Welcome " + role + "!");
-                    break;
+        } catch (UserNotFoundException | InvalidPasswordException | IllegalArgumentException e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
+    // ================= HELPER METHODS =================
+
+    private static boolean isAdmin(String username, String password) {
+        return username.equals("admin") && password.equals("admin");
+    }
+
+    private static void routeUser(ROLE role, Scanner scanner, String username) {
+
+        switch (role) {
+
+            case CLIENT -> {
+                System.out.println("Welcome Client!");
+                ClientUI.show(scanner, username);
             }
-        } catch (UserNotFoundException | InvalidPasswordException e) {
-            System.out.println("Login failed: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Login failed: " + e.getMessage());
+
+            case BUILDER -> {
+                System.out.println("Welcome Builder!");
+                BuilderUI.show(scanner, username); // if exists
+            }
+
+            case MANAGER -> {
+                System.out.println("Welcome Manager!");
+                ManagerUI.show(scanner, username);
+            }
+
+            default -> System.out.println("Welcome " + role + "!");
         }
     }
 }

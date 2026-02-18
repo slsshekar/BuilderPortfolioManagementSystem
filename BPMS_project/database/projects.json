@@ -1,13 +1,13 @@
 {
-  "project" : {
-    "name" : "project",
-    "description" : "project",
-    "taskList" : [ "task" ],
+  "p1" : {
+    "name" : "p1",
+    "description" : "p1",
+    "taskList" : [ ],
     "managerList" : [ "manager" ],
     "clientName" : "client",
-    "status" : "IN_PROGRESS",
-    "startDate" : "2019-10-21",
-    "endDate" : "2020-10-22",
+    "status" : "NOT_APPROVED",
+    "startDate" : null,
+    "endDate" : null,
     "id" : 1
   }
 }

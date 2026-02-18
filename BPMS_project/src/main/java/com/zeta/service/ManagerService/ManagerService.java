@@ -1,114 +1,109 @@
 package com.zeta.service.ManagerService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zeta.model.*;
-import com.zeta.service.FileService.FileService;
+import com.zeta.DAO.ProjectDAO;
+import com.zeta.model.Project;
+import com.zeta.model.STATUS;
+import com.zeta.model.Task;
+import com.zeta.service.TaskService.TaskService;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
-import java.util.Map;
 
 public class ManagerService {
 
-    private final ObjectMapper mapper;
+    private final ProjectDAO projectDAO;
+    private final TaskService taskService;
 
-    public ManagerService(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public ManagerService(ProjectDAO projectDAO, TaskService taskService) {
+        this.projectDAO = projectDAO;
+        this.taskService = taskService;
     }
 
-    public void createTask(String projectName, String taskName, String description, String username, LocalDate start, LocalDate end) {
+    public void createTaskForProject(String projectName,
+                                     String taskName,
+                                     String description,
+                                     String managerName,
+                                     LocalDate start,
+                                     LocalDate end) {
 
-        Map<String, Project> projectMap = FileService.loadFromFile("database/projects.json", mapper, Project.class);
+        Map<String, Project> projects = projectDAO.load();
 
-        Map<String, Task> taskMap = FileService.loadFromFile("database/tasks.json", mapper, Task.class);
-
-        Project project = projectMap.get(projectName);
+        Project project = projects.get(projectName);
 
         if (project == null) {
-            throw new RuntimeException("Project not found");
+            throw new RuntimeException("Project not found: " + projectName);
         }
 
-        if (taskMap.containsKey(taskName)) {
-            throw new RuntimeException("Task already exists");
+        // ✅ Validate manager assignment (correct domain validation)
+        if (!project.getManagerList().contains(managerName)) {
+            throw new RuntimeException("Manager not assigned to this project");
         }
+        taskService.createTask(
+                taskName,
+                description,
+                projectName,
+                managerName,
+                start,
+                end
+        );
 
-        Task task = new Task(taskName, description, projectName, username, start, end);
-
-        taskMap.put(taskName, task);
+        // update project task list
         project.getTaskList().add(taskName);
 
+        // update project status automatically
         if (project.getStatus() == STATUS.UPCOMING) {
             project.setStatus(STATUS.IN_PROGRESS);
         }
 
-        FileService.saveToFile(projectMap, "database/projects.json", mapper);
-        FileService.saveToFile(taskMap, "database/tasks.json", mapper);
+        projectDAO.save(projects);
     }
+
+    public Map<STATUS, List<Project>> getProjectsByStatus(Set<String> projectNames) {
+
+        Map<String, Project> allProjects = projectDAO.load();
+
+        return projectNames.stream()
+                .map(allProjects::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Project::getStatus));
+    }
+    
 
     public Project getProject(String projectName) {
 
-        Map<String, Project> projects = FileService.loadFromFile("database/projects.json", mapper, Project.class);
+        Map<String, Project> projects = projectDAO.load();
+
         Project project = projects.get(projectName);
+
         if (project == null) {
-            throw new RuntimeException("Project not found");
+            throw new RuntimeException("Project not found: " + projectName);
         }
 
         return project;
     }
+    // ================= GET ALL TASKS OF PROJECT =================
 
-    public void assignBuilder(String projectName, String taskName, String builderName) {
+    public List<Task> getTasksOfProject(String projectName) {
 
-        Map<String, Project> projects = FileService.loadFromFile("database/projects.json", mapper, Project.class);
+        // load all projects
+        Map<String, Project> projectMap = projectDAO.load();
 
-        Map<String, Task> tasks = FileService.loadFromFile("database/tasks.json", mapper, Task.class);
+        Project project = projectMap.get(projectName);
 
-        Map<String, User> users = FileService.loadFromFile("database/users.json", mapper, User.class);
-
-        Project project = projects.get(projectName);
-        if (project == null) throw new RuntimeException("Project not found");
-
-        Task task = tasks.get(taskName);
-        if (task == null) throw new RuntimeException("Task not found");
-
-        User user = users.get(builderName);
-        if (!(user instanceof Builder builder))
-            throw new RuntimeException("Invalid builder");
-
-        task.getBuilderList().add(builderName);
-        builder.getTaskList().add(taskName);
-
-        FileService.saveToFile(tasks, "database/tasks.json", mapper);
-        FileService.saveToFile(users, "database/users.json", mapper);
-    }
-
-    public void updateTaskStatus(String taskName, STATUS status) {
-
-        Map<String, Task> tasks = FileService.loadFromFile("database/tasks.json", mapper, Task.class);
-
-        Task task = tasks.get(taskName);
-
-        if (task == null) {
-            throw new RuntimeException("Task not found");
+        if (project == null) {
+            throw new RuntimeException("Project not found: " + projectName);
         }
 
-        task.setStatus(status);
+        // get all tasks from task service
+        Map<String, Task> allTasks = taskService.getAllTasks();
 
-        FileService.saveToFile(tasks, "database/tasks.json", mapper);
-    }
-
-    public Map<STATUS, List<Project>> getProjectsByStatusForManager(Set<String> projectNames) {
-
-        Map<String, Project> allProjects =
-                FileService.loadFromFile("database/projects.json", mapper, Project.class);
-
-        List<Project> managerProjects = projectNames.stream()
-                .map(allProjects::get)
+        // convert task names -> task objects
+        return project.getTaskList()
+                .stream()
+                .map(allTasks::get)
                 .filter(Objects::nonNull)
                 .toList();
-
-        return managerProjects.stream()
-                .collect(Collectors.groupingBy(Project::getStatus));
     }
-
 
 }
