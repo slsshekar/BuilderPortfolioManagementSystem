@@ -63,7 +63,7 @@ public class ManagerUI {
         System.out.println("\n====== PROJECT BOARD ======");
 
         for (STATUS status : STATUS.values()) {
-
+            if(status==STATUS.NOT_APPROVED)continue;
             System.out.println("\n" + getEmoji(status) + " " + status);
 
             var projects = groupedProjects.get(status);
