@@ -1,13 +1,21 @@
 {
   "manager-2" : {
+<<<<<<< HEAD
     "id" : 93,
+=======
+    "id" : 89,
+>>>>>>> 70f6cc14050f5506e42898e11cca11c3e2262faf
     "name" : "manager-2",
     "password" : "12345",
     "role" : "MANAGER",
     "projectList" : [ "testProject-2" ]
   },
   "manager-1" : {
+<<<<<<< HEAD
     "id" : 54,
+=======
+    "id" : 50,
+>>>>>>> 70f6cc14050f5506e42898e11cca11c3e2262faf
     "name" : "manager-1",
     "password" : "12345",
     "role" : "MANAGER",
@@ -21,21 +29,33 @@
     "projectList" : [ ]
   },
   "testCreateClient" : {
+<<<<<<< HEAD
     "id" : 26,
+=======
+    "id" : 22,
+>>>>>>> 70f6cc14050f5506e42898e11cca11c3e2262faf
     "name" : "testCreateClient",
     "password" : "1234",
     "role" : "CLIENT",
     "projectList" : [ "testCreate-1" ]
   },
   "client-2" : {
+<<<<<<< HEAD
     "id" : 80,
+=======
+    "id" : 76,
+>>>>>>> 70f6cc14050f5506e42898e11cca11c3e2262faf
     "name" : "client-2",
     "password" : "12345",
     "role" : "CLIENT",
     "projectList" : [ "testProject-2" ]
   },
   "client-1" : {
+<<<<<<< HEAD
     "id" : 45,
+=======
+    "id" : 41,
+>>>>>>> 70f6cc14050f5506e42898e11cca11c3e2262faf
     "name" : "client-1",
     "password" : "12345",
     "role" : "CLIENT",
