@@ -3,12 +3,14 @@ package com.zeta.service.TaskService;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.Exceptions.TaskException.InvalidTaskException;
 import com.zeta.Exceptions.TaskException.TaskNotFoundException;
+import com.zeta.logging.Logger;
 import com.zeta.model.STATUS;
 import com.zeta.model.Task;
 
 import java.util.Map;
 
 public class UpdateTaskStatus {
+    static Logger logger = Logger.getInstance();
 
     private final TaskDAO taskDAO;
 
@@ -37,7 +39,7 @@ public class UpdateTaskStatus {
         taskMap.put(key, task);
         taskDAO.save(taskMap);
 
-        System.out.println("Task status updated to " + newStatus + " for task: " + task.getName());
+        logger.info("Task status updated to " + newStatus + " for task: " + task.getName());
         return true;
     }
 }

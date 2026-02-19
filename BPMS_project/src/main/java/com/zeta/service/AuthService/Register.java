@@ -1,6 +1,7 @@
 package com.zeta.service.AuthService;
 
 import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
+import com.zeta.logging.Logger;
 import com.zeta.model.*;
 import com.zeta.DAO.UserDAO;
 import com.zeta.service.utility.Utility;
@@ -8,7 +9,7 @@ import com.zeta.service.utility.Utility;
 import java.util.Map;
 
 public class Register {
-
+    static Logger logger = Logger.getInstance();
     private final UserDAO userDAO;
 
     // dependency injection
@@ -40,7 +41,7 @@ public class Register {
         userList.put(username, user);
         userDAO.save(userList);
 
-        System.out.println("User registered successfully: " + username);
+        logger.info("User registered successfully: " + username);
 
         return true;
     }

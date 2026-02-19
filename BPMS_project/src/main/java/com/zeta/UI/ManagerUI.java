@@ -7,6 +7,7 @@ import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
+import com.zeta.logging.Logger;
 import com.zeta.model.STATUS;
 import com.zeta.service.ManagerService.ManagerService;
 import com.zeta.service.ProjectService.ProjectService;
@@ -21,6 +22,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class ManagerUI {
+    static Logger logger = Logger.getInstance();
+
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -51,55 +54,56 @@ public class ManagerUI {
                     case 4 -> assignBuilder(scanner);
                     case 5 -> updateTaskStatus(scanner);
                     case 6 -> {
-                        System.out.println("Logging out...");
+                        logger.info("Logging out...");
                         return;
                     }
-                    default -> System.out.println("Invalid choice");
+                    default -> logger.info("Invalid choice");
                 }
 
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                logger.warn("Error: " + e.getMessage());
             }
         }
     }
 
     private static void printMenu() {
-        System.out.println("\n Manager Menu : ");
-        System.out.println("1. View Projects");
-        System.out.println("2. Create Task");
-        System.out.println("3. View Project Details");
-        System.out.println("4. Assign Builder");
-        System.out.println("5. Update Task Status");
-        System.out.println("6. Logout");
+        logger.info("\n=== Manager Menu ===");
+        logger.info("1. View Projects");
+        logger.info("2. Create Task");
+        logger.info("3. View Project Details");
+        logger.info("4. Assign Builder");
+        logger.info("5. Update Task Status");
+        logger.info("6. Logout");
         System.out.print("Enter your choice (1-6): ");
     }
+
 
     private static void viewProjects(String username) throws UserNotFoundException {
 
         Set<String> projectNames = projectService.getProjectsByManagerName(username);
 
         if (projectNames == null || projectNames.isEmpty()) {
-            System.out.println("No projects assigned to you.");
+            logger.info("No projects assigned to you.");
             return;
         }
 
         var groupedProjects = managerService.getProjectsByStatus(projectNames);
 
-        System.out.println("\n PROJECT BOARD: ");
+        logger.info("\n PROJECT BOARD: ");
 
         for (STATUS status : STATUS.values()) {
 
             if (status == STATUS.NOT_APPROVED)
                 continue;
 
-            System.out.println("\n" + getEmoji(status) + " " + status);
+            logger.info("\n" + getEmoji(status) + " " + status);
 
             var projects = groupedProjects.getOrDefault(status, new ArrayList<>());
 
             if (projects.isEmpty()) {
-                System.out.println("No projects");
+                logger.info("No projects");
             } else {
-                projects.forEach(p -> System.out.println("- " + p.getName()));
+                projects.forEach(p -> logger.info("- " + p.getName()));
             }
         }
     }
@@ -120,7 +124,7 @@ public class ManagerUI {
         String projectName = scanner.nextLine().trim();
 
         if (!projectService.getProjectsByManagerName(username).contains(projectName)) {
-            System.out.println("Project not assigned to you");
+            logger.info("Project not assigned to you");
             return;
         }
 
@@ -137,7 +141,7 @@ public class ManagerUI {
         managerService.createTaskForProject(
                 projectName, taskName, desc, username, start, end);
 
-        System.out.println("Task created successfully");
+        logger.info("Task created successfully");
     }
 
     private static void viewProject(Scanner scanner, String username) throws UserNotFoundException {
@@ -146,38 +150,38 @@ public class ManagerUI {
         String projectName = scanner.nextLine();
         Set<String> projectNames = projectService.getProjectsByManagerName(username);
         if (!projectNames.contains(projectName)) {
-            System.out.println(projectName + " does not exist for you");
+            logger.info(projectName + " does not exist for you");
         }
         var project = managerService.getProject(projectName);
-        System.out.println(project);
+        logger.info(String.valueOf(project));
         var tasks = managerService.getTasksOfProject(projectName);
 
-        System.out.println("\n------ TASKS ------");
+        logger.info("\n------ TASKS ------");
 
         if (tasks.isEmpty()) {
-            System.out.println("No tasks created for this project");
+            logger.info("No tasks created for this project");
             return;
         }
 
         for (var task : tasks) {
-            System.out.println("\nTask Name: " + task.getName());
-            System.out.println("Description: " + task.getDescription());
-            System.out.println("Status: " + task.getStatus());
-            System.out.println("Start: " + task.getStartDate());
-            System.out.println("End: " + task.getEndDate());
-            System.out.println("Builders: " + task.getBuilderList());
+            logger.info("\nTask Name: " + task.getName());
+            logger.info("Description: " + task.getDescription());
+            logger.info("Status: " + task.getStatus());
+            logger.info("Start: " + task.getStartDate());
+            logger.info("End: " + task.getEndDate());
+            logger.info("Builders: " + task.getBuilderList());
         }
     }
 
     private static void assignBuilder(Scanner scanner) {
-        System.out.println("Enter project name:");
+        logger.info("Enter project name:");
         String projectName = scanner.nextLine();
         System.out.print("Enter task name: ");
         String taskName = scanner.nextLine();
         System.out.print("Enter builder name: ");
         String builderName = scanner.nextLine();
         assignmentService.assignBuilderToTask(taskName, builderName);
-        System.out.println("Builder assigned successfully");
+        logger.info("Builder assigned successfully");
     }
 
     private static void updateTaskStatus(Scanner scanner) {
@@ -187,6 +191,6 @@ public class ManagerUI {
         System.out.print("Enter status: ");
         STATUS status = STATUS.valueOf(scanner.nextLine().toUpperCase());
         taskService.updateTaskStatus(taskName, status);
-        System.out.println("Status updated successfully");
+        logger.info("Status updated successfully");
     }
 }

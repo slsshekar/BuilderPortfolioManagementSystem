@@ -6,13 +6,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.InvalidPasswordException;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
+import com.zeta.logging.Logger;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Login;
 
 import java.util.Scanner;
 
 public class LoginUI {
-
+    static Logger logger = Logger.getInstance();
     private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     private static final UserDAO userDAO = new UserDAO(mapper);
@@ -21,16 +22,16 @@ public class LoginUI {
 
     public static void show(Scanner scanner) {
 
-        System.out.println("\n=== Login ===");
+        logger.info("\n=== Login ===");
 
-        System.out.print("Enter username: ");
+        logger.info("Enter username: ");
         String username = scanner.nextLine().trim();
 
-        System.out.print("Enter password: ");
+        logger.info("Enter password: ");
         String password = scanner.nextLine().trim();
 
         if (isAdmin(username, password)) {
-            System.out.println("Welcome Admin!");
+            logger.info("Welcome Admin!");
             AdminUI.show(scanner);
             return;
         }
@@ -40,7 +41,7 @@ public class LoginUI {
             routeUser(role, scanner, username);
 
         } catch (UserNotFoundException | InvalidPasswordException | IllegalArgumentException e) {
-            System.out.println("Login failed: " + e.getMessage());
+            logger.warn("Login failed: " + e.getMessage());
         }
     }
 
@@ -53,21 +54,21 @@ public class LoginUI {
         switch (role) {
 
             case CLIENT -> {
-                System.out.println("Welcome Client!");
+                logger.info("Welcome Client!");
                 ClientUI.show(scanner, username);
             }
 
             case BUILDER -> {
-                System.out.println("Welcome Builder!");
+                logger.info("Welcome Builder!");
                 BuilderUI.show(scanner, username); // if exists
             }
 
             case MANAGER -> {
-                System.out.println("Welcome Manager!");
+                logger.info("Welcome Manager!");
                 ManagerUI.show(scanner, username);
             }
 
-            default -> System.out.println("Welcome " + role + "!");
+            default -> logger.info("Welcome " + role + "!");
         }
     }
 }

@@ -1,22 +1,23 @@
 package com.zeta.UI;
 
+import com.zeta.logging.Logger;
 import com.zeta.service.utility.Utility;
 
 import java.util.Scanner;
 
 public class MainMenuUI {
-
+    static Logger logger = Logger.getInstance();
     public static void show() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to Builder Portfolio Management System");
+        logger.info("Welcome to Builder Portfolio Management System");
 
         while (true) {
-            System.out.println("\n Main Menu : ");
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            logger.info("\n Main Menu : ");
+            logger.info("1. Register");
+            logger.info("2. Login");
+            logger.info("3. Exit");
+            logger.info("Enter your choice: ");
 
             int choice = Utility.getValidChoice(scanner);
 
@@ -28,11 +29,11 @@ public class MainMenuUI {
                     LoginUI.show(scanner);
                     break;
                 case 3:
-                    System.out.println("Exiting the application");
+                    logger.info("Exiting the application");
                     scanner.close();
                     return;
                 default:
-                    System.out.println("Please enter a valid number (1-3)");
+                    logger.info("Please enter a valid number (1-3)");
                     break;
             }
         }

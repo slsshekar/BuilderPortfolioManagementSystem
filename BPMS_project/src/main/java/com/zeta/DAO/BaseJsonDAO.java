@@ -23,7 +23,6 @@ public abstract class BaseJsonDAO<T> {
         this.mapper = mapper;
         this.path = path;
         this.typeReference = typeReference;
-        System.out.println("Using database file: " + path.toAbsolutePath());
 
     }
 

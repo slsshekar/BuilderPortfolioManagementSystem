@@ -8,6 +8,7 @@ import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
 import com.zeta.Exceptions.ProjectServiceException.ClientDoesNotExistException;
 import com.zeta.Exceptions.ProjectServiceException.ProjectAlreadyExistsException;
+import com.zeta.logging.Logger;
 import com.zeta.model.Project;
 import com.zeta.model.STATUS;
 import com.zeta.service.ProjectService.ProjectService;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ClientUI {
-
+    static Logger logger = Logger.getInstance();
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -42,19 +43,19 @@ public class ClientUI {
                 case 1 -> createProject(scanner, clientName);
                 case 2 -> getProjectStatus(clientName);
                 case 3 -> {
-                    System.out.println("Logged out successfully.");
+                    logger.info("Logged out successfully.");
                     return;
                 }
-                default -> System.out.println("Please enter a valid number (1-3)");
+                default -> logger.info("Please enter a valid number (1-3)");
             }
         }
     }
 
     private static void printMenu() {
-        System.out.println("\n=== Client Menu ===");
-        System.out.println("1. Create Project");
-        System.out.println("2. Get Project Status");
-        System.out.println("3. Logout");
+        logger.info("\n=== Client Menu ===");
+        logger.info("1. Create Project");
+        logger.info("2. Get Project Status");
+        logger.info("3. Logout");
         System.out.print("Enter your choice: ");
     }
 
@@ -75,11 +76,11 @@ public class ClientUI {
 
             projectService.create(project, clientName);
 
-            System.out.println("Project created successfully!");
+            logger.info("Project created successfully!");
 
         } catch (ProjectAlreadyExistsException | ClientDoesNotExistException | IllegalArgumentException e) {
 
-            System.out.println("Project creation failed: " + e.getMessage());
+            logger.warn("Project creation failed: " + e.getMessage());
         }
     }
 
@@ -89,7 +90,7 @@ public class ClientUI {
             Map<String, STATUS> projectStatusMap = projectService.getProjectStatusByClient(clientName);
 
             if (projectStatusMap.isEmpty()) {
-                System.out.println("No projects found.");
+                logger.info("No projects found.");
                 return;
             }
 
@@ -101,21 +102,21 @@ public class ClientUI {
                 grouped.get(entry.getValue()).add(entry.getKey());
             }
 
-            System.out.println("\n PROJECT BOARD: ");
+            logger.info("\n PROJECT BOARD: ");
 
             for (STATUS status : STATUS.values()) {
-                System.out.println("\n" + getEmoji(status) + " " + status);
+                logger.info("\n" + getEmoji(status) + " " + status);
                 List<String> projects = grouped.get(status);
                 if (projects == null || projects.isEmpty()) {
-                    System.out.println("  No projects");
+                    logger.info("  No projects");
                 } else {
                     for (String name : projects) {
-                        System.out.println("  - " + name);
+                        logger.info("  - " + name);
                     }
                 }
             }
         } catch (UserNotFoundException e) {
-            System.out.println("Error: " + e.getMessage());
+            logger.warn("Error: " + e.getMessage());
         }
     }
 

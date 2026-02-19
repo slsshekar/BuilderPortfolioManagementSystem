@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
+import com.zeta.logging.Logger;
 import com.zeta.model.ROLE;
 import com.zeta.service.AuthService.Register;
 import com.zeta.service.utility.Utility;
@@ -12,6 +13,7 @@ import com.zeta.service.utility.Utility;
 import java.util.Scanner;
 
 public class RegisterUI {
+    static Logger logger = Logger.getInstance();
 
     // create mapper once (best practice)
     private static final ObjectMapper mapper = new ObjectMapper()
@@ -45,20 +47,20 @@ public class RegisterUI {
 
             try {
                 registerService.register(username, password, role);
-                System.out.println(role + " registered successfully!");
+                logger.info(role + " registered successfully!");
 
             } catch (RoleMismatchException | IllegalArgumentException e) {
-                System.out.println("Registration failed: " + e.getMessage());
+                logger.info("Registration failed: " + e.getMessage());
             }
         }
     }
 
     private static void printMenu() {
-        System.out.println("\n=== Register Menu ===");
-        System.out.println("1. Register as Client");
-        System.out.println("2. Register as Builder");
-        System.out.println("3. Register as Manager");
-        System.out.println("4. Back");
+        logger.info("\n=== Register Menu ===");
+        logger.info("1. Register as Client");
+        logger.info("2. Register as Builder");
+        logger.info("3. Register as Manager");
+        logger.info("4. Back");
         System.out.print("Enter your choice: ");
     }
 
@@ -68,7 +70,7 @@ public class RegisterUI {
             case 2 -> ROLE.BUILDER;
             case 3 -> ROLE.MANAGER;
             default -> {
-                System.out.println("Please enter a valid number (1-4)");
+                logger.info("Please enter a valid number (1-4)");
                 yield null;
             }
         };

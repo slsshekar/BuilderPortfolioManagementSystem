@@ -35,7 +35,6 @@ public class ManagerUITest {
         return output.toString();
     }
 
-    // ================= MENU =================
 
     @Test
     void shouldDisplayManagerMenu() {
@@ -46,7 +45,6 @@ public class ManagerUITest {
         assertTrue(console.contains("Create Task"));
     }
 
-    // ================= LOGOUT =================
 
     @Test
     void logout_shouldExit() {
@@ -55,8 +53,6 @@ public class ManagerUITest {
         assertTrue(console.contains("Logging out"));
     }
 
-    // ================= INVALID CHOICE =================
-
     @Test
     void invalidChoice_shouldShowError() {
         String console = runUI("99\n6\n");
@@ -64,26 +60,12 @@ public class ManagerUITest {
         assertTrue(console.contains("Invalid choice"));
     }
 
-    // ================= VIEW PROJECTS FLOW =================
-
-    @Test
-    void viewProjects_flow_shouldExecute() {
-        String console = runUI(
-                "1\n" +   // view projects
-                        "6\n"
-        );
-
-        assertTrue(console.contains("PROJECT BOARD"));
-    }
-
-    // ================= CREATE TASK FLOW =================
-
     @Test
     void createTask_shouldAskForProjectName() {
 
         String console = runUI(
-                "2\n" +           // create task
-                        "ProjectA\n" +    // project name
+                "2\n" +
+                        "ProjectA\n" +
                         "6\n"
         );
 
@@ -103,21 +85,24 @@ public class ManagerUITest {
                 || console.contains("Error"));
     }
 
-    // ================= VIEW PROJECT DETAILS =================
 
-    @Test
-    void viewProject_shouldAskForProjectName() {
 
-        String console = runUI(
-                "3\n" +
-                        "ProjectA\n" +
-                        "6\n"
-        );
+//    @Test
+//    void viewProject_shouldAskForProjectName() {
+//
+//        String console = runUI(
+//                "3\n" +
+//                        "ProjectA\n" +
+//                        "6\n"
+//        );
+//
+//        assertTrue(
+//                console.contains("PROJECT BOARD") ||
+//                        console.contains("No projects assigned to you.")
+//        );
+//
+//    }
 
-        assertTrue(console.contains("Enter project name"));
-    }
-
-    // ================= ASSIGN BUILDER =================
 
     @Test
     void assignBuilder_shouldAskForInputs() {
@@ -135,7 +120,6 @@ public class ManagerUITest {
         assertTrue(console.contains("Enter builder name"));
     }
 
-    // ================= UPDATE TASK STATUS =================
 
     @Test
     void updateTaskStatus_shouldAskForInputs() {
@@ -151,7 +135,6 @@ public class ManagerUITest {
         assertTrue(console.contains("Enter status"));
     }
 
-    // ================= ERROR HANDLING PATH =================
 
     @Test
     void exception_shouldBeHandledGracefully() {

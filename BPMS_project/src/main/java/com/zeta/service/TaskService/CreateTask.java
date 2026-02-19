@@ -3,14 +3,14 @@ package com.zeta.service.TaskService;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.Exceptions.TaskException.InvalidTaskException;
 import com.zeta.Exceptions.TaskException.TaskAlreadyExistsException;
+import com.zeta.logging.Logger;
 import com.zeta.model.Task;
 
 import java.util.Map;
 
 public class CreateTask {
-
+    static Logger logger = Logger.getInstance();
     private final TaskDAO taskDAO;
-
     public CreateTask(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
@@ -35,7 +35,7 @@ public class CreateTask {
         taskMap.put(key, task);
         taskDAO.save(taskMap);
 
-        System.out.println("Task created successfully: " + task.getName());
+        logger.info("Task created successfully: " + task.getName());
         return true;
     }
 }

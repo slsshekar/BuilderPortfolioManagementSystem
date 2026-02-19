@@ -11,6 +11,7 @@ import com.zeta.Exceptions.ProjectServiceException.RoleMismatchException;
 import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.UserDAO;
 
+import com.zeta.logging.Logger;
 import com.zeta.service.ProjectService.ProjectService;
 import com.zeta.service.utility.Utility;
 
@@ -19,19 +20,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminUI {
-
-    // ---------- ObjectMapper ----------
+    static Logger logger = Logger.getInstance();
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    // ---------- DAO Layer ----------
     private static final ProjectDAO projectDAO = new ProjectDAO(mapper);
     private static final UserDAO userDAO = new UserDAO(mapper);
 
-    // ---------- Service Layer ----------
     private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
-
 
     public static void show(Scanner scanner) {
 
@@ -46,21 +43,21 @@ public class AdminUI {
                 case 3 -> approveProject(scanner);
                 case 4 -> assignManager(scanner);
                 case 5 -> {
-                    System.out.println("Logged out successfully.");
+                    logger.info("Logged out successfully.");
                     return;
                 }
-                default -> System.out.println("Please enter a valid number (1-5)");
+                default -> logger.info("Please enter a valid number (1-5)");
             }
         }
     }
 
     private static void printMenu() {
-        System.out.println("\n=== Admin Menu ===");
-        System.out.println("1. Show all unapproved projects");
-        System.out.println("2. Show all approved projects");
-        System.out.println("3. Approve project");
-        System.out.println("4. Assign manager");
-        System.out.println("5. Logout");
+        logger.info("\n=== Admin Menu ===");
+        logger.info("1. Show all unapproved projects");
+        logger.info("2. Show all approved projects");
+        logger.info("3. Approve project");
+        logger.info("4. Assign manager");
+        logger.info("5. Logout");
         System.out.print("Enter your choice: ");
     }
 
@@ -70,13 +67,13 @@ public class AdminUI {
         List<String> unapprovedProjects = projectService.getUnapprovedProjects();
 
         if (unapprovedProjects.isEmpty()) {
-            System.out.println("No unapproved projects found");
+            logger.info("No unapproved projects found");
             return;
         }
 
-        System.out.println("\nUnapproved Projects:");
+        logger.info("\nUnapproved Projects:");
         for (int i = 0; i < unapprovedProjects.size(); i++) {
-            System.out.println((i + 1) + ". " + unapprovedProjects.get(i));
+            logger.info((i + 1) + ". " + unapprovedProjects.get(i));
         }
     }
 
@@ -86,13 +83,13 @@ public class AdminUI {
         List<String> approvedProjects = projectService.getApprovedProjects();
 
         if (approvedProjects.isEmpty()) {
-            System.out.println("No approved projects found");
+            logger.info("No approved projects found");
             return;
         }
 
-        System.out.println("\nApproved Projects:");
+        logger.info("\nApproved Projects:");
         for (int i = 0; i < approvedProjects.size(); i++) {
-            System.out.println((i + 1) + ". " + approvedProjects.get(i));
+            logger.info((i + 1) + ". " + approvedProjects.get(i));
         }
     }
 
@@ -111,17 +108,17 @@ public class AdminUI {
             return;
 
         if (endDate.isBefore(startDate)) {
-            System.out.println("End date cannot be before start date.");
-            System.out.println("Project not approved");
+            logger.info("End date cannot be before start date.");
+            logger.info("Project not approved");
             return;
         }
 
         try {
             projectService.approve(projectName, startDate, endDate);
-            System.out.println("Project approved successfully!");
+            logger.info("Project approved successfully!");
 
         } catch (ProjectDoestNotExistException | IllegalArgumentException e) {
-            System.out.println("Approval failed: " + e.getMessage());
+            logger.warn("Approval failed: " + e.getMessage());
         }
     }
 
@@ -135,12 +132,12 @@ public class AdminUI {
 
         try {
             projectService.assignManager(projectName, managerName);
-            System.out.println("Manager assigned successfully!");
+            logger.info("Manager assigned successfully!");
 
         } catch (ProjectDoestNotExistException | UserNotFoundException | RoleMismatchException
                 | IllegalArgumentException e) {
 
-            System.out.println("Assignment failed: " + e.getMessage());
+            logger.warn("Assignment failed: " + e.getMessage());
         }
     }
 }
