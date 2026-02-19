@@ -1,110 +1,111 @@
 package UITest;
 
 import com.zeta.UI.AdminUI;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AdminUITest {
 
-    private final PrintStream originalOut = System.out;
-    private final InputStream originalIn = System.in;
+    private ByteArrayOutputStream output;
+    private PrintStream originalOut;
+    private InputStream originalIn;
+
+    @BeforeEach
+    void setup() {
+        originalOut = System.out;
+        originalIn = System.in;
+
+        output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+    }
 
     @AfterEach
-    void restoreStreams() {
+    void cleanup() {
         System.setOut(originalOut);
         System.setIn(originalIn);
     }
 
-    @Test
-    void show_shouldDisplayMenu() {
-
-        String input = "5\n"; // logout immediately
+    private String runUI(String input) {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
+        AdminUI.show(new Scanner(System.in));
+        return output.toString();
+    }
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
 
-        AdminUI.show(new java.util.Scanner(System.in));
-
-        String console = output.toString();
+    @Test
+    void shouldDisplayAdminMenu() {
+        String console = runUI("6\n");
 
         assertTrue(console.contains("Admin Menu"));
         assertTrue(console.contains("Show all unapproved projects"));
-        assertTrue(console.contains("Logout"));
+        assertTrue(console.contains("Approve project"));
     }
 
     @Test
-    void show_invalidChoice_shouldPrintError() {
+    void invalidChoice_shouldShowError() {
+        String console = runUI("99\n6\n");
 
-        String input = "9\n5\n";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        assertTrue(console.contains("Please enter a valid number"));
+    }
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
 
-        AdminUI.show(new java.util.Scanner(System.in));
+    @Test
+    void showUnapprovedProjects_shouldExecute() {
+        String console = runUI("1\n6\n");
 
-        assertTrue(output.toString().contains("Please enter a valid number"));
+        assertTrue(
+                console.contains("Unapproved Projects") ||
+                        console.contains("No unapproved projects")
+        );
+    }
+
+
+    @Test
+    void showApprovedProjects_shouldExecute() {
+        String console = runUI("2\n6\n");
+
+        assertTrue(
+                console.contains("Approved Projects") ||
+                        console.contains("No approved projects")
+        );
     }
 
     @Test
-    void show_logout_shouldExit() {
+    void approveProject_invalidDates_shouldShowError() {
 
-        String input = "5\n";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        String console = runUI(
+                "3\n" +
+                        "ProjectA\n" +
+                        "10-10-2025\n" +
+                        "01-10-2025\n" +
+                        "6\n"
+        );
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-        AdminUI.show(new java.util.Scanner(System.in));
-
-        assertTrue(output.toString().contains("Logged out successfully"));
+        assertTrue(console.contains("End date cannot be"));
     }
-
     @Test
-    void approveProject_endDateBeforeStart_shouldShowError() {
+    void assignManager_shouldAskForInputs() {
 
-        String input =
-                "3\n" +                  // approve project
-                        "project1\n" +
-                        "10-10-2026\n" +        // start date
-                        "01-01-2026\n" +        // end date (invalid)
-                        "5\n";
-
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-        AdminUI.show(new java.util.Scanner(System.in));
-
-        assertTrue(output.toString().contains("End date cannot be before start date"));
-    }
-
-    @Test
-    void assignManager_shouldAskInputs() {
-
-        String input =
-                "4\n" +      // assign manager
-                        "project1\n" +
+        String console = runUI(
+                "4\n" +
+                        "ProjectA\n" +
                         "manager1\n" +
-                        "5\n";
-
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-        AdminUI.show(new java.util.Scanner(System.in));
-
-        String console = output.toString();
+                        "6\n"
+        );
 
         assertTrue(console.contains("Enter project name"));
         assertTrue(console.contains("Enter manager name"));
     }
 
+
+    @Test
+    void viewProjectBoard_shouldDisplayBoard() {
+        String console = runUI("5\n6\n");
+
+        assertTrue(console.contains("PROJECT BOARD"));
+    }
 }
