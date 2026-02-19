@@ -54,18 +54,13 @@ public class TestCreate {
     void create_projectExists_shouldThrow() {
 
         Project project = mock(Project.class);
+        Client client = mock(Client.class);
 
         when(project.getName()).thenReturn("ProjectA");
         when(project.getDescription()).thenReturn("desc");
 
-<<<<<<< Updated upstream
         when(projectDAO.load()).thenReturn(Map.of("ProjectA", project));
-        when(userDAO.load()).thenReturn(Map.of("client1", mock(Client.class)));
-=======
-        when(projectDAO.load()).thenReturn(Map.of("P1", project));
-
         when(userDAO.load()).thenReturn(Map.of("client1", client));
->>>>>>> Stashed changes
 
         assertThrows(ProjectAlreadyExistsException.class,
                 () -> projectService.create(project, "client1"));

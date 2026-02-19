@@ -12,12 +12,15 @@ import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.UserDAO;
 
 import com.zeta.logging.Logger;
+import com.zeta.model.STATUS;
 import com.zeta.service.ProjectService.ProjectService;
 import com.zeta.service.utility.Utility;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+
+import static com.zeta.UI.ClientUI.getEmoji;
 
 public class AdminUI {
     static Logger logger = Logger.getInstance();
@@ -42,7 +45,8 @@ public class AdminUI {
                 case 2 -> showApprovedProjects();
                 case 3 -> approveProject(scanner);
                 case 4 -> assignManager(scanner);
-                case 5 -> {
+                case 5 -> viewAllProjectsBoard();
+                case 6 -> {
                     logger.info("Logged out successfully.");
                     return;
                 }
@@ -57,7 +61,9 @@ public class AdminUI {
         logger.info("2. Show all approved projects");
         logger.info("3. Approve project");
         logger.info("4. Assign manager");
-        logger.info("5. Logout");
+        logger.info("5. view project board");
+        logger.info("6. Logout");
+
         System.out.print("Enter your choice: ");
     }
 
@@ -140,4 +146,27 @@ public class AdminUI {
             logger.warn("Assignment failed: " + e.getMessage());
         }
     }
+    private static void viewAllProjectsBoard() {
+
+        var groupedProjects = projectService.getAllProjectsGroupedByStatus();
+
+        logger.info("\n PROJECT BOARD: ");
+
+        for (STATUS status : STATUS.values()) {
+
+            if (status == STATUS.NOT_APPROVED)
+                continue;
+
+            logger.info("\n" + getEmoji(status) + " " + status);
+
+            var projects = groupedProjects.getOrDefault(status, new java.util.ArrayList<>());
+
+            if (projects.isEmpty()) {
+                logger.info("No projects");
+            } else {
+                projects.forEach(p -> logger.info("- " + p.getName()));
+            }
+        }
+    }
+
 }

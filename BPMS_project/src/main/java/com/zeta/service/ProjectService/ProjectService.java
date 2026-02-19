@@ -177,4 +177,21 @@ public class ProjectService {
                 .map(Map.Entry::getKey)
                 .toList();
     }
+    public Map<STATUS, List<Project>> getAllProjectsGroupedByStatus() {
+
+        Map<String, Project> projectMap = projectDAO.load();
+
+        Map<STATUS, List<Project>> grouped = new HashMap<>();
+
+        for (STATUS status : STATUS.values()) {
+            grouped.put(status, new ArrayList<>());
+        }
+
+        for (Project project : projectMap.values()) {
+            grouped.get(project.getStatus()).add(project);
+        }
+
+        return grouped;
+    }
+
 }

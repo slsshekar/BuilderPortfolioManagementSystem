@@ -36,14 +36,7 @@ public class TestAssignManager {
         Project project = mock(Project.class);
         Manager manager = mock(Manager.class);
 
-<<<<<<< Updated upstream
         when(projectDAO.load()).thenReturn(Map.of("ProjectA", project));
-=======
-        Manager manager = new Manager("manager1", "pass", ROLE.MANAGER);
-        manager.setProjectList(new HashSet<>());
-
-        when(projectDAO.load()).thenReturn(Map.of("P1", project));
->>>>>>> Stashed changes
         when(userDAO.load()).thenReturn(Map.of("manager1", manager));
 
         when(manager.getRole()).thenReturn(ROLE.MANAGER);
@@ -80,10 +73,7 @@ public class TestAssignManager {
     @Test
     void assignManager_roleMismatch_shouldThrow() {
 
-<<<<<<< Updated upstream
         Project project = mock(Project.class);
-=======
->>>>>>> Stashed changes
         User user = mock(User.class);
 
         when(projectDAO.load()).thenReturn(Map.of("ProjectA", project));

@@ -120,7 +120,7 @@ public class ClientUI {
         }
     }
 
-    private static String getEmoji(STATUS status) {
+    static String getEmoji(STATUS status) {
         return switch (status) {
             case NOT_APPROVED -> "📋";
             case UPCOMING -> "📌";

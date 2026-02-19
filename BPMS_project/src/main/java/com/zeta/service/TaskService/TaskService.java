@@ -44,7 +44,7 @@ public class TaskService {
         this.projectDAO = projectDAO;
     }
 
-    public void updateTaskStatus(String taskName, STATUS status) {
+    public boolean updateTaskStatus(String taskName, STATUS status) {
 
         Map<String, Task> tasks = taskDAO.load();
 
@@ -57,6 +57,7 @@ public class TaskService {
 
         taskDAO.save(tasks);
         checkAndUpdateProjectStatus(task.getProjectName(), tasks);
+        return true;
     }
     private void checkAndUpdateProjectStatus(String projectName, Map<String, Task> tasks) {
         if (projectName == null || projectName.isBlank()) return;
