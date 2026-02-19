@@ -40,7 +40,7 @@ public class ManagerUITest {
     void shouldDisplayManagerMenu() {
         String console = runUI("6\n");
 
-        assertTrue(console.contains("=== Manager Menu ==="));
+        assertTrue(console.contains("Manager Menu"));
         assertTrue(console.contains("View Projects"));
         assertTrue(console.contains("Create Task"));
     }

@@ -25,7 +25,7 @@ public class TaskServiceGetAllTasksTest {
     void setup() {
         taskDAO = mock(TaskDAO.class);
         userDAO = mock(UserDAO.class);
-        service = new TaskService(taskDAO, userDAO,projectDAO);
+        service = new TaskService(taskDAO, userDAO, projectDAO);
     }
 
     @Test

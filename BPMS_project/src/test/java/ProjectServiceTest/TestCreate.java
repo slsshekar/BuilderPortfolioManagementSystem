@@ -59,7 +59,10 @@ public class TestCreate {
         when(project.getName()).thenReturn("ProjectA");
         when(project.getDescription()).thenReturn("desc");
 
+        // project already present -> should trigger ProjectAlreadyExistsException
         when(projectDAO.load()).thenReturn(Map.of("ProjectA", project));
+
+        // client must exist, otherwise ClientDoesNotExistException would be thrown first
         when(userDAO.load()).thenReturn(Map.of("client1", client));
 
         assertThrows(ProjectAlreadyExistsException.class,
