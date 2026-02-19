@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Project {
-    private static int counter=1;
+    private static int counter = 1;
     private String name;
     private String description;
     private Set<String> taskList = new HashSet<>();
@@ -15,17 +15,20 @@ public class Project {
     private LocalDate startDate;
     private LocalDate endDate;
     private int id;
-    public Project(){
+
+    public Project() {
 
     }
-    public Project(String name, String description, LocalDate startDate, LocalDate endDate){
-        this.name=name;
-        this.description=description;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.id=counter++;
-        this.status=STATUS.NOT_APPROVED;
+
+    public Project(String name, String description, LocalDate startDate, LocalDate endDate) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.id = counter++;
+        this.status = STATUS.NOT_APPROVED;
     }
+
     public int getId() {
         return id;
     }
@@ -54,7 +57,7 @@ public class Project {
         this.taskList = taskList;
     }
 
-    public Set<String > getManagerList() {
+    public Set<String> getManagerList() {
         return managerList;
     }
 
@@ -93,6 +96,7 @@ public class Project {
     public void setStatus(STATUS status) {
         this.status = status;
     }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -105,7 +109,6 @@ public class Project {
                 ", taskList=" + taskList +
                 '}';
     }
-
 
 
 }

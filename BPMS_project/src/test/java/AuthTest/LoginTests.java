@@ -46,7 +46,6 @@ public class LoginTests {
     void login_userNotFound_shouldThrowException() {
 
         when(userDAO.load()).thenReturn(Map.of());
-
         assertThrows(UserNotFoundException.class,
                 () -> login.login("unknown", "1234"));
     }

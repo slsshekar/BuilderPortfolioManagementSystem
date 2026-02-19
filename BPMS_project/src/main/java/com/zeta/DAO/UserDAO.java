@@ -16,7 +16,8 @@ public class UserDAO extends BaseJsonDAO<User> {
         super(
                 mapper,
                 Paths.get(FILE),
-                new TypeReference<Map<String, User>>() {}
+                new TypeReference<Map<String, User>>() {
+                }
         );
     }
 }

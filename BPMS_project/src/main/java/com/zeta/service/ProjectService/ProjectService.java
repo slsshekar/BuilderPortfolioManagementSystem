@@ -50,7 +50,7 @@ public class ProjectService {
         return true;
     }
 
-    public void approve(String projectName,LocalDate startDate,LocalDate endDate) throws ProjectDoestNotExistException {
+    public void approve(String projectName, LocalDate startDate, LocalDate endDate) throws ProjectDoestNotExistException {
         Map<String, Project> projects = projectDAO.load();
 
         if (!projects.containsKey(projectName)) {
@@ -177,12 +177,11 @@ public class ProjectService {
                 .map(Map.Entry::getKey)
                 .toList();
     }
+
     public Map<STATUS, List<Project>> getAllProjectsGroupedByStatus() {
 
         Map<String, Project> projectMap = projectDAO.load();
-
         Map<STATUS, List<Project>> grouped = new HashMap<>();
-
         for (STATUS status : STATUS.values()) {
             grouped.put(status, new ArrayList<>());
         }

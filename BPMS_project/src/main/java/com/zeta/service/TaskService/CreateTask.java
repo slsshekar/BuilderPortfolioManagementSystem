@@ -11,6 +11,7 @@ import java.util.Map;
 public class CreateTask {
     static Logger logger = Logger.getInstance();
     private final TaskDAO taskDAO;
+
     public CreateTask(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }

@@ -87,6 +87,7 @@ public class AdminUITest {
 
         assertTrue(console.contains("End date cannot be"));
     }
+
     @Test
     void assignManager_shouldAskForInputs() {
 

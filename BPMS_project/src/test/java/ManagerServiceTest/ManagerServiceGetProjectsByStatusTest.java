@@ -37,9 +37,7 @@ public class ManagerServiceGetProjectsByStatusTest {
         p2.setStatus(STATUS.COMPLETED);
 
         when(projectDAO.load()).thenReturn(Map.of("p1", p1, "p2", p2));
-
-        Map<STATUS, List<Project>> result =
-                service.getProjectsByStatus(Set.of("p1","p2"));
+        Map<STATUS, List<Project>> result = service.getProjectsByStatus(Set.of("p1", "p2"));
 
         assertTrue(result.get(STATUS.UPCOMING).contains(p1));
         assertTrue(result.get(STATUS.COMPLETED).contains(p2));
@@ -50,8 +48,7 @@ public class ManagerServiceGetProjectsByStatusTest {
 
         when(projectDAO.load()).thenReturn(new HashMap<>());
 
-        Map<STATUS, List<Project>> result =
-                service.getProjectsByStatus(Set.of("invalid"));
+        Map<STATUS, List<Project>> result = service.getProjectsByStatus(Set.of("invalid"));
 
         assertTrue(result.isEmpty());
     }

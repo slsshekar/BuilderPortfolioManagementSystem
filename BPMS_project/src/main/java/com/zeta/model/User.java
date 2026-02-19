@@ -2,6 +2,7 @@ package com.zeta.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = Client.class, name = "CLIENT")
 })
 public abstract class User {
-    private static int counter=1;
+    private static int counter = 1;
     private int id;
     private String name;
     private String password;
@@ -28,14 +29,17 @@ public abstract class User {
     }
 
     private ROLE role;
+
     public User() {
         this.id = counter++;
     }
-    public User(String name, String password, ROLE role){
-        this.name=name;
-        this.password=password;
-        this.role=role;
+
+    public User(String name, String password, ROLE role) {
+        this.name = name;
+        this.password = password;
+        this.role = role;
     }
+
     public int getId() {
         return id;
     }

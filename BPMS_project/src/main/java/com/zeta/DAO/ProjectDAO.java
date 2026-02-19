@@ -15,7 +15,8 @@ public class ProjectDAO extends BaseJsonDAO<Project> {
         super(
                 mapper,
                 Paths.get(FILE),
-                new TypeReference<Map<String, Project>>() {}
+                new TypeReference<Map<String, Project>>() {
+                }
         );
     }
 }

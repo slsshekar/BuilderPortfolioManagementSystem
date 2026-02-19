@@ -14,6 +14,7 @@ public class TaskService {
     private final TaskDAO taskDAO;
     private final UserDAO userDAO;
     private final ProjectDAO projectDAO;
+
     public void createTask(String taskName,
                            String description,
                            String projectName,
@@ -59,6 +60,7 @@ public class TaskService {
         checkAndUpdateProjectStatus(task.getProjectName(), tasks);
         return true;
     }
+
     private void checkAndUpdateProjectStatus(String projectName, Map<String, Task> tasks) {
         if (projectName == null || projectName.isBlank()) return;
 
@@ -82,8 +84,9 @@ public class TaskService {
     public Task getTask(String taskName) {
         return taskDAO.load().get(taskName);
     }
+
     public Map<String, Task> getAllTasks() {
         return taskDAO.load();
     }
-    
+
 }

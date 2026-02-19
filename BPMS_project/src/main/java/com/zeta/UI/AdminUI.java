@@ -141,11 +141,12 @@ public class AdminUI {
             logger.info("Manager assigned successfully!");
 
         } catch (ProjectDoestNotExistException | UserNotFoundException | RoleMismatchException
-                | IllegalArgumentException e) {
+                 | IllegalArgumentException e) {
 
             logger.warn("Assignment failed: " + e.getMessage());
         }
     }
+
     private static void viewAllProjectsBoard() {
 
         var groupedProjects = projectService.getAllProjectsGroupedByStatus();

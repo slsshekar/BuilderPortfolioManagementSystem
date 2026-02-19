@@ -40,7 +40,7 @@ public class ManagerServiceCreateTaskTest {
 
         when(projectDAO.load()).thenReturn(projectMap);
 
-        service.createTaskForProject("P1","task1","desc",
+        service.createTaskForProject("P1", "task1", "desc",
                 "manager1", LocalDate.now(), LocalDate.now());
 
         verify(taskService).createTask(any(), any(), any(), any(), any(), any());
@@ -56,7 +56,7 @@ public class ManagerServiceCreateTaskTest {
         when(projectDAO.load()).thenReturn(new HashMap<>());
 
         assertThrows(RuntimeException.class,
-                () -> service.createTaskForProject("P","task","d",
+                () -> service.createTaskForProject("P", "task", "d",
                         "manager", LocalDate.now(), LocalDate.now()));
     }
 
@@ -68,8 +68,7 @@ public class ManagerServiceCreateTaskTest {
 
         when(projectDAO.load()).thenReturn(Map.of("P1", project));
 
-        assertThrows(RuntimeException.class,
-                () -> service.createTaskForProject("P1","task","d",
+        assertThrows(RuntimeException.class, () -> service.createTaskForProject("P1", "task", "d",
                         "manager1", LocalDate.now(), LocalDate.now()));
     }
 }

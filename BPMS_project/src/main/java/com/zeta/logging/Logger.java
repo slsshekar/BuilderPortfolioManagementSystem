@@ -3,13 +3,14 @@ package com.zeta.logging;
 public class Logger {
 
     private static Logger instance;
-    
+
     private static final String RESET = "\u001B[0m";
     private static final String WHITE = "\u001B[37m";
     private static final String RED = "\u001B[31m";
     private static final String YELLOW = "\u001B[33m";
 
-    private Logger() {}
+    private Logger() {
+    }
 
     public static synchronized Logger getInstance() {
         if (instance == null) {

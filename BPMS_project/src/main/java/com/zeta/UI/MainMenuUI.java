@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class MainMenuUI {
     static Logger logger = Logger.getInstance();
+
     public static void show() {
         Scanner scanner = new Scanner(System.in);
 

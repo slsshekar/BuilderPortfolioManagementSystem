@@ -90,6 +90,7 @@ public class RegisterTest {
         assertThrows(IllegalArgumentException.class,
                 () -> register.register("user", "   ", ROLE.CLIENT));
     }
+
     @Test
     void register_nullRole_shouldThrowIllegalArgumentException() {
 

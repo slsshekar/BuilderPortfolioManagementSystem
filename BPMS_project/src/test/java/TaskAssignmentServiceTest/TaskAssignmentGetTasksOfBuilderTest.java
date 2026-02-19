@@ -30,7 +30,7 @@ public class TaskAssignmentGetTasksOfBuilderTest {
     void shouldReturnTasksOfBuilder() {
 
         Builder builder = new Builder();
-        builder.setTaskList(Set.of("t1","t2"));
+        builder.setTaskList(Set.of("t1", "t2"));
 
         when(userDAO.load()).thenReturn(Map.of("builder1", builder));
 

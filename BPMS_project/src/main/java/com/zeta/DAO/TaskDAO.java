@@ -15,7 +15,8 @@ public class TaskDAO extends BaseJsonDAO<Task> {
         super(
                 mapper,
                 Paths.get(FILE),
-                new TypeReference<Map<String, Task>>() {}
+                new TypeReference<Map<String, Task>>() {
+                }
         );
     }
 }

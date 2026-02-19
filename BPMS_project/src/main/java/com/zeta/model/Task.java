@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Task {
-    private static int counter=1;
+    private static int counter = 1;
     private int id;
     private String name;
     private String description;
@@ -15,19 +15,22 @@ public class Task {
     private LocalDate startDate;
     private LocalDate endDate;
     private STATUS status;
-    public Task(){
+
+    public Task() {
 
     }
-    public Task(String name,String description,String projectName,String managerName,LocalDate startDate,LocalDate endDate){
-        this.id=counter++;
-        this.name=name;
-        this.description=description;
-        this.projectName=projectName;
-        this.managerName=managerName;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.status=STATUS.UPCOMING;
+
+    public Task(String name, String description, String projectName, String managerName, LocalDate startDate, LocalDate endDate) {
+        this.id = counter++;
+        this.name = name;
+        this.description = description;
+        this.projectName = projectName;
+        this.managerName = managerName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = STATUS.UPCOMING;
     }
+
     public int getId() {
         return id;
     }
