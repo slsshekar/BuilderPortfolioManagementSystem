@@ -64,7 +64,7 @@ public class AdminUI {
         logger.info("5. view project board");
         logger.info("6. Logout");
 
-        System.out.print("Enter your choice: ");
+        logger.info("Enter your choice: ");
     }
 
 
@@ -102,7 +102,7 @@ public class AdminUI {
 
     private static void approveProject(Scanner scanner) {
 
-        System.out.print("Enter project name: ");
+        logger.info("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
         LocalDate startDate = Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
@@ -130,10 +130,10 @@ public class AdminUI {
 
     private static void assignManager(Scanner scanner) {
 
-        System.out.print("Enter project name: ");
+        logger.info("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
-        System.out.print("Enter manager name: ");
+        logger.info("Enter manager name: ");
         String managerName = scanner.nextLine().trim();
 
         try {

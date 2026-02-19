@@ -74,7 +74,7 @@ public class ManagerUI {
         logger.info("4. Assign Builder");
         logger.info("5. Update Task Status");
         logger.info("6. Logout");
-        System.out.print("Enter your choice (1-6): ");
+        logger.info("Enter your choice (1-6): ");
     }
 
 
@@ -120,7 +120,7 @@ public class ManagerUI {
     private static void createTask(Scanner scanner, String username)
             throws UserNotFoundException {
 
-        System.out.print("Enter project name: ");
+        logger.info("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
         if (!projectService.getProjectsByManagerName(username).contains(projectName)) {
@@ -128,10 +128,10 @@ public class ManagerUI {
             return;
         }
 
-        System.out.print("Enter task name: ");
+        logger.info("Enter task name: ");
         String taskName = scanner.nextLine().trim();
 
-        System.out.print("Enter task description: ");
+        logger.info("Enter task description: ");
         String desc = scanner.nextLine().trim();
 
         LocalDate start = Utility.readDate(scanner, "Enter start date (dd-MM-yyyy): ");
@@ -146,7 +146,7 @@ public class ManagerUI {
 
     private static void viewProject(Scanner scanner, String username) throws UserNotFoundException {
 
-        System.out.print("Enter project name: ");
+        logger.info("Enter project name: ");
         String projectName = scanner.nextLine();
         Set<String> projectNames = projectService.getProjectsByManagerName(username);
         if (!projectNames.contains(projectName)) {
@@ -176,9 +176,9 @@ public class ManagerUI {
     private static void assignBuilder(Scanner scanner) {
         logger.info("Enter project name:");
         String projectName = scanner.nextLine();
-        System.out.print("Enter task name: ");
+        logger.info("Enter task name: ");
         String taskName = scanner.nextLine();
-        System.out.print("Enter builder name: ");
+        logger.info("Enter builder name: ");
         String builderName = scanner.nextLine();
         assignmentService.assignBuilderToTask(taskName, builderName);
         logger.info("Builder assigned successfully");
@@ -186,9 +186,9 @@ public class ManagerUI {
 
     private static void updateTaskStatus(Scanner scanner) {
 
-        System.out.print("Enter task name: ");
+        logger.info("Enter task name: ");
         String taskName = scanner.nextLine();
-        System.out.print("Enter status: ");
+        logger.info("Enter status: ");
         STATUS status = STATUS.valueOf(scanner.nextLine().toUpperCase());
         taskService.updateTaskStatus(taskName, status);
         logger.info("Status updated successfully");

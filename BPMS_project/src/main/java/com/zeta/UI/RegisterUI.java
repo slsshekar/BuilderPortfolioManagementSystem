@@ -36,10 +36,10 @@ public class RegisterUI {
             ROLE role = getRoleFromChoice(choice);
             if (role == null) continue;
 
-            System.out.print("Enter username: ");
+            logger.info("Enter username: ");
             String username = scanner.nextLine().trim();
 
-            System.out.print("Enter password: ");
+            logger.info("Enter password: ");
             String password = scanner.nextLine().trim();
 
             try {
@@ -58,7 +58,7 @@ public class RegisterUI {
         logger.info("2. Register as Builder");
         logger.info("3. Register as Manager");
         logger.info("4. Back");
-        System.out.print("Enter your choice: ");
+        logger.info("Enter your choice: ");
     }
 
     private static ROLE getRoleFromChoice(int choice) {

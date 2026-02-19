@@ -56,15 +56,15 @@ public class ClientUI {
         logger.info("1. Create Project");
         logger.info("2. Get Project Status");
         logger.info("3. Logout");
-        System.out.print("Enter your choice: ");
+        logger.info("Enter your choice: ");
     }
 
     private static void createProject(Scanner scanner, String clientName) {
 
-        System.out.print("Enter project name: ");
+        logger.info("Enter project name: ");
         String projectName = scanner.nextLine().trim();
 
-        System.out.print("Enter project description: ");
+        logger.info("Enter project description: ");
         String projectDescription = scanner.nextLine().trim();
 
         try {
