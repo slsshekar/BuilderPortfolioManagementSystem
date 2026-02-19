@@ -40,7 +40,7 @@ public class LoginUITest {
     void shouldDisplayLoginPrompt() {
         String console = runUI("user\npass\n");
 
-        assertTrue(console.contains("=== Login ==="));
+        assertTrue(console.contains("Login :"));
         assertTrue(console.contains("Enter username"));
         assertTrue(console.contains("Enter password"));
     }

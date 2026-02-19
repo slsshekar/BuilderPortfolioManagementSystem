@@ -1,5 +1,6 @@
 package TaskServiceTest;
 
+import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.DAO.UserDAO;
 import com.zeta.model.STATUS;
@@ -18,13 +19,14 @@ public class TaskServiceUpdateTaskStatusTest {
 
     private TaskDAO taskDAO;
     private UserDAO userDAO;
+    private ProjectDAO projectDAO;
     private TaskService service;
 
     @BeforeEach
     void setup() {
         taskDAO = mock(TaskDAO.class);
         userDAO = mock(UserDAO.class);
-        service = new TaskService(taskDAO, userDAO);
+        service = new TaskService(taskDAO, userDAO, projectDAO);
     }
 
     @Test
