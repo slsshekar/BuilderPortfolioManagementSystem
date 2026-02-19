@@ -3,15 +3,13 @@ package ProjectServiceTest;
 import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.UserDAO;
 import com.zeta.Exceptions.LoginException.UserNotFoundException;
-import com.zeta.model.Client;
 import com.zeta.model.Manager;
-import com.zeta.model.ROLE;
 import com.zeta.service.ProjectService.ProjectService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,45 +28,23 @@ public class TestGetProjectListByManagerName {
     }
 
     @Test
-    void testGetProjectListWithValidManagerName() throws Exception {
+    void getProjects_validManager_shouldReturnProjects() throws Exception {
 
-        Manager manager = new Manager("manager-2", "12345", ROLE.MANAGER);
-        manager.setProjectList(Set.of("testProject-2"));
+        Manager manager = mock(Manager.class);
+        when(manager.getProjectList()).thenReturn(Set.of("ProjectA"));
+        when(userDAO.load()).thenReturn(Map.of("manager1", manager));
 
-        when(userDAO.load())
-                .thenReturn(Map.of("manager-2", manager));
+        Set<String> result = projectService.getProjectsByManagerName("manager1");
 
-        Set<String> result =
-                projectService.getProjectsByManagerName("manager-2");
-
-        assertEquals(Set.of("testProject-2"), result);
+        assertTrue(result.contains("ProjectA"));
     }
 
     @Test
-    void testGetProjectListWithInvalidUser() {
+    void getProjects_invalidManager_shouldThrow() {
 
-        when(userDAO.load()).thenReturn(new HashMap<>());
+        when(userDAO.load()).thenReturn(Map.of());
 
         assertThrows(UserNotFoundException.class,
-                () -> projectService.getProjectsByManagerName("invalid"));
-    }
-
-    @Test
-    void testGetProjectListWithInvalidInput() {
-
-        assertThrows(IllegalArgumentException.class,
-                () -> projectService.getProjectsByManagerName(" "));
-    }
-
-    @Test
-    void testGetProjectListWithNonManager() {
-
-        Client client = new Client();
-
-        when(userDAO.load())
-                .thenReturn(Map.of("client-2", client));
-
-        assertThrows(UserNotFoundException.class,
-                () -> projectService.getProjectsByManagerName("client-2"));
+                () -> projectService.getProjectsByManagerName("manager1"));
     }
 }

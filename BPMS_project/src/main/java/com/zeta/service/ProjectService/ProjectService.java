@@ -50,27 +50,23 @@ public class ProjectService {
         return true;
     }
 
-    public boolean approve(String projectName, LocalDate startDate, LocalDate endDate)
-            throws ProjectDoestNotExistException {
+    public void approve(String projectName,LocalDate startDate,LocalDate endDate) throws ProjectDoestNotExistException {
+        Map<String, Project> projects = projectDAO.load();
 
-        Map<String, Project> projectMap = projectDAO.load();
-
-        Utility.validateInput(projectName, "project name");
-
-        Project project = projectMap.get(projectName);
-
-        if (project == null) {
-            throw new ProjectDoestNotExistException(projectName + " does not exist");
+        if (!projects.containsKey(projectName)) {
+            throw new ProjectDoestNotExistException("Project not found: " + projectName);
         }
 
-        project.setStatus(STATUS.UPCOMING);
+        Utility.validateInput(projectName, "Project name");
+
+        Project project = projects.get(projectName);
         project.setStartDate(startDate);
         project.setEndDate(endDate);
+        project.setStatus(STATUS.UPCOMING);
 
-        projectDAO.save(projectMap);
-
-        return true;
+        projectDAO.save(projects);
     }
+
 
     public boolean assignManager(String projectName, String managerName)
             throws ProjectDoestNotExistException, UserNotFoundException, RoleMismatchException {
