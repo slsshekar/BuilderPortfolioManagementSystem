@@ -3,6 +3,7 @@ package com.zeta.UI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.DAO.UserDAO;
 import com.zeta.logging.Logger;
@@ -25,8 +26,12 @@ public class BuilderUI {
 
     private static final TaskDAO taskDAO = new TaskDAO(mapper);
     private static final UserDAO userDAO = new UserDAO(mapper);
+    private static final ProjectDAO projectDAO = new ProjectDAO(mapper);
 
-    private static final TaskService taskService = new TaskService(taskDAO, userDAO);
+
+    private static final TaskService taskService =
+            new TaskService(taskDAO, userDAO, projectDAO);
+
     private static final TaskAssignmentService assignmentService = new TaskAssignmentService(taskDAO, userDAO);
 
     public static void show(Scanner scanner, String builderName) {
@@ -53,7 +58,7 @@ public class BuilderUI {
     }
 
     private static void printMenu() {
-        logger.info("\n=== Builder Menu ===");
+        logger.info("\n Builder Menu : ");
         logger.info("1. View All Assigned Tasks");
         logger.info("2. View Tasks By Status");
         logger.info("3. View Task Details");
@@ -130,7 +135,7 @@ public class BuilderUI {
 
     private static void printTask(Task task) {
 
-        logger.info("\n===== Task Details =====");
+        logger.info("\n Task Details : ");
         logger.info("Name: " + task.getName());
         logger.info("Description: " + task.getDescription());
         logger.info("Project: " + task.getProjectName());

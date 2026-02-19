@@ -19,7 +19,6 @@ public class RegisterUITest {
         System.setIn(originalIn);
     }
 
-    // ================= MENU DISPLAY =================
 
     @Test
     void show_shouldDisplayRegisterMenu() {
@@ -40,8 +39,6 @@ public class RegisterUITest {
         assertTrue(console.contains("Register as Manager"));
     }
 
-    // ================= INVALID MENU OPTION =================
-
     @Test
     void invalidChoice_shouldShowError() {
 
@@ -55,8 +52,6 @@ public class RegisterUITest {
 
         assertTrue(output.toString().contains("Please enter a valid number"));
     }
-
-    // ================= REGISTER CLIENT FLOW =================
 
     @Test
     void registerClient_flow_shouldAskUsernameAndPassword() {
@@ -80,8 +75,6 @@ public class RegisterUITest {
         assertTrue(console.contains("Enter password"));
     }
 
-    // ================= REGISTER BUILDER FLOW =================
-
     @Test
     void registerBuilder_flow_shouldAskInputs() {
 
@@ -100,8 +93,6 @@ public class RegisterUITest {
 
         assertTrue(output.toString().contains("Enter username"));
     }
-
-    // ================= REGISTER MANAGER FLOW =================
 
     @Test
     void registerManager_flow_shouldAskInputs() {

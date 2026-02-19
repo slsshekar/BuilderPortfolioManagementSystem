@@ -1,16 +1,19 @@
 package com.zeta.service.TaskService;
 
+import com.zeta.DAO.ProjectDAO;
 import com.zeta.DAO.TaskDAO;
 import com.zeta.DAO.UserDAO;
 import com.zeta.model.*;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 public class TaskService {
 
     private final TaskDAO taskDAO;
     private final UserDAO userDAO;
+    private final ProjectDAO projectDAO;
     public void createTask(String taskName,
                            String description,
                            String projectName,
@@ -32,11 +35,13 @@ public class TaskService {
 
         tasks.put(taskName, task);
         taskDAO.save(tasks);
+
     }
 
-    public TaskService(TaskDAO taskDAO, UserDAO userDAO) {
+    public TaskService(TaskDAO taskDAO, UserDAO userDAO, ProjectDAO projectDAO) {
         this.taskDAO = taskDAO;
         this.userDAO = userDAO;
+        this.projectDAO = projectDAO;
     }
 
     public void updateTaskStatus(String taskName, STATUS status) {
@@ -51,6 +56,26 @@ public class TaskService {
         task.setStatus(status);
 
         taskDAO.save(tasks);
+        checkAndUpdateProjectStatus(task.getProjectName(), tasks);
+    }
+    private void checkAndUpdateProjectStatus(String projectName, Map<String, Task> tasks) {
+        if (projectName == null || projectName.isBlank()) return;
+
+        Map<String, Project> projectMap = projectDAO.load();
+        Project project = projectMap.get(projectName);
+        if (project == null) return;
+
+        Set<String> taskNames = project.getTaskList();
+        if (taskNames == null || taskNames.isEmpty()) return;
+
+        for (String tn : taskNames) {
+            Task t = tasks.get(tn);
+            if (t == null || t.getStatus() != STATUS.COMPLETED) {
+                return;
+            }
+        }
+        project.setStatus(STATUS.COMPLETED);
+        projectDAO.save(projectMap);
     }
 
     public Task getTask(String taskName) {

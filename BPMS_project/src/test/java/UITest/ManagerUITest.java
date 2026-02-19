@@ -86,24 +86,6 @@ public class ManagerUITest {
     }
 
 
-
-//    @Test
-//    void viewProject_shouldAskForProjectName() {
-//
-//        String console = runUI(
-//                "3\n" +
-//                        "ProjectA\n" +
-//                        "6\n"
-//        );
-//
-//        assertTrue(
-//                console.contains("PROJECT BOARD") ||
-//                        console.contains("No projects assigned to you.")
-//        );
-//
-//    }
-
-
     @Test
     void assignBuilder_shouldAskForInputs() {
 

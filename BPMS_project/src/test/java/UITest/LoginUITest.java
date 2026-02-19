@@ -35,7 +35,6 @@ public class LoginUITest {
         return output.toString();
     }
 
-    // ================= MENU DISPLAY =================
 
     @Test
     void shouldDisplayLoginPrompt() {
@@ -46,7 +45,6 @@ public class LoginUITest {
         assertTrue(console.contains("Enter password"));
     }
 
-    // ================= ADMIN LOGIN =================
 
     @Test
     void adminLogin_shouldWelcomeAdmin() {
@@ -61,16 +59,12 @@ public class LoginUITest {
     }
 
 
-    // ================= INVALID USER =================
-
     @Test
     void invalidUser_shouldShowLoginFailed() {
         String console = runUI("invalidUser\n1234\n");
 
         assertTrue(console.contains("Login failed"));
     }
-
-    // ================= INVALID PASSWORD =================
 
     @Test
     void wrongPassword_shouldShowLoginFailed() {
@@ -79,7 +73,6 @@ public class LoginUITest {
         assertTrue(console.contains("Login failed"));
     }
 
-    // ================= INVALID INPUT =================
 
     @Test
     void blankUsername_shouldShowError() {
@@ -94,8 +87,6 @@ public class LoginUITest {
 
         assertTrue(console.contains("Login failed"));
     }
-
-    // ================= ROUTING LOGIC CHECK =================
 
     @Test
     void validLogin_shouldRouteBasedOnRole() {

@@ -19,12 +19,10 @@ public class MainMenuUITest {
         System.setIn(originalIn);
     }
 
-    // ================= SHOW WELCOME =================
 
     @Test
     void show_shouldDisplayWelcomeMessage() {
 
-        // choose exit immediately
         String input = "3\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
@@ -37,7 +35,6 @@ public class MainMenuUITest {
                 .contains("Welcome to Builder Portfolio Management System"));
     }
 
-    // ================= DISPLAY MENU =================
 
     @Test
     void show_shouldDisplayMainMenuOptions() {
@@ -58,7 +55,6 @@ public class MainMenuUITest {
         assertTrue(console.contains("Exit"));
     }
 
-    // ================= EXIT OPTION =================
 
     @Test
     void choosingExit_shouldTerminateApplication() {
@@ -74,8 +70,6 @@ public class MainMenuUITest {
         assertTrue(output.toString().contains("Exiting the application"));
     }
 
-    // ================= INVALID OPTION =================
-
     @Test
     void invalidChoice_shouldShowErrorMessage() {
 
@@ -89,9 +83,6 @@ public class MainMenuUITest {
 
         assertTrue(output.toString().contains("valid number"));
     }
-
-    // ================= REGISTER ROUTING =================
-    // only checks navigation happens (not full RegisterUI)
 
     @Test
     void choosingRegister_shouldNavigateToRegisterMenu() {
@@ -111,7 +102,6 @@ public class MainMenuUITest {
         assertTrue(output.toString().contains("Register Menu"));
     }
 
-    // ================= LOGIN ROUTING =================
 
     @Test
     void choosingLogin_shouldNavigateToLoginScreen() {

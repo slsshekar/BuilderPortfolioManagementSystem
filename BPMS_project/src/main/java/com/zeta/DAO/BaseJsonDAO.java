@@ -3,9 +3,7 @@ package com.zeta.DAO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.FilterOutputStream;
 import java.io.RandomAccessFile;
-import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Path;
@@ -26,7 +24,6 @@ public abstract class BaseJsonDAO<T> {
 
     }
 
-    // ---------------- LOAD ----------------
     public Map<String, T> load() {
 
         path.toFile().getParentFile().mkdirs();
@@ -39,7 +36,6 @@ public abstract class BaseJsonDAO<T> {
                 return new HashMap<>();
             }
 
-            // READ DIRECTLY FROM FILE (not channel stream)
             return mapper.readValue(path.toFile(), typeReference);
 
         } catch (Exception e) {
@@ -49,7 +45,6 @@ public abstract class BaseJsonDAO<T> {
     }
 
 
-    // ---------------- SAVE ----------------
     public void save(Map<String, T> data) {
 
         path.toFile().getParentFile().mkdirs();
@@ -58,7 +53,6 @@ public abstract class BaseJsonDAO<T> {
              FileChannel channel = file.getChannel();
              FileLock lock = channel.lock()) {
 
-            // WRITE DIRECTLY TO FILE
             mapper.writeValue(path.toFile(), data);
 
         } catch (Exception e) {

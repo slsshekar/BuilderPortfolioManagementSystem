@@ -52,7 +52,7 @@ public class AdminUI {
     }
 
     private static void printMenu() {
-        logger.info("\n=== Admin Menu ===");
+        logger.info("\n Admin Menu : ");
         logger.info("1. Show all unapproved projects");
         logger.info("2. Show all approved projects");
         logger.info("3. Approve project");

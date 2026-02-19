@@ -34,7 +34,7 @@ public class ManagerUI {
 
     private static final ProjectService projectService = new ProjectService(projectDAO, userDAO);
 
-    private static final TaskService taskService = new TaskService(taskDAO, userDAO);
+    private static final TaskService taskService = new TaskService(taskDAO, userDAO, projectDAO);
 
     private static final TaskAssignmentService assignmentService = new TaskAssignmentService(taskDAO, userDAO);
 
@@ -67,7 +67,7 @@ public class ManagerUI {
     }
 
     private static void printMenu() {
-        logger.info("\n=== Manager Menu ===");
+        logger.info("\n Manager Menu : ");
         logger.info("1. View Projects");
         logger.info("2. Create Task");
         logger.info("3. View Project Details");

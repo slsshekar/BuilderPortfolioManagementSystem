@@ -52,7 +52,7 @@ public class ClientUI {
     }
 
     private static void printMenu() {
-        logger.info("\n=== Client Menu ===");
+        logger.info("\n Client Menu : ");
         logger.info("1. Create Project");
         logger.info("2. Get Project Status");
         logger.info("3. Logout");

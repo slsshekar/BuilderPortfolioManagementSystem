@@ -20,7 +20,6 @@ public class ClientUITest {
         System.setIn(originalIn);
     }
 
-    // ================= MENU DISPLAY =================
 
     @Test
     void show_shouldDisplayMenu() {
@@ -40,8 +39,6 @@ public class ClientUITest {
         assertTrue(console.contains("Get Project Status"));
     }
 
-    // ================= INVALID CHOICE =================
-
     @Test
     void show_invalidChoice_shouldPrintError() {
 
@@ -56,7 +53,6 @@ public class ClientUITest {
         assertTrue(output.toString().contains("Please enter a valid number"));
     }
 
-    // ================= LOGOUT =================
 
     @Test
     void show_logout_shouldExit() {
@@ -72,7 +68,6 @@ public class ClientUITest {
         assertTrue(output.toString().contains("Logged out successfully"));
     }
 
-    // ================= CREATE PROJECT FLOW =================
 
     @Test
     void createProject_shouldAskInputs() {
@@ -96,7 +91,6 @@ public class ClientUITest {
         assertTrue(console.contains("Enter project description"));
     }
 
-    // ================= GET PROJECT STATUS FLOW =================
 
     @Test
     void getProjectStatus_shouldExecuteFlow() {
@@ -114,7 +108,6 @@ public class ClientUITest {
 
         String console = output.toString();
 
-        // DB may be empty so either case is valid
         assertTrue(
                 console.contains("Your Projects") ||
                         console.contains("No projects found") ||

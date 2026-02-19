@@ -15,15 +15,12 @@ import java.util.Scanner;
 public class RegisterUI {
     static Logger logger = Logger.getInstance();
 
-    // create mapper once (best practice)
     private static final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    // DAO layer
     private static final UserDAO userDAO = new UserDAO(mapper);
 
-    // service layer (dependency injection)
     private static final Register registerService = new Register(userDAO);
 
     public static void show(Scanner scanner) {

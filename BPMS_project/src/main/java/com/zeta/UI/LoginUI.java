@@ -22,7 +22,7 @@ public class LoginUI {
 
     public static void show(Scanner scanner) {
 
-        logger.info("\n=== Login ===");
+        logger.info("\n Login : ");
 
         logger.info("Enter username: ");
         String username = scanner.nextLine().trim();
