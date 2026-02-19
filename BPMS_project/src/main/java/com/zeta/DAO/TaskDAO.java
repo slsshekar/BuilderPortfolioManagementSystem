@@ -1,25 +1,21 @@
 package com.zeta.DAO;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zeta.model.Task;
-import com.zeta.service.FileService.FileService;
 
+import java.nio.file.Paths;
 import java.util.Map;
 
-public class TaskDAO {
+public class TaskDAO extends BaseJsonDAO<Task> {
 
-    private final ObjectMapper mapper;
     private static final String FILE = "database/tasks.json";
 
     public TaskDAO(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    public Map<String, Task> load() {
-        return FileService.loadFromFile(FILE, mapper, Task.class);
-    }
-
-    public void save(Map<String, Task> tasks) {
-        FileService.saveToFile(tasks, FILE, mapper);
+        super(
+                mapper,
+                Paths.get(FILE),
+                new TypeReference<Map<String, Task>>() {}
+        );
     }
 }

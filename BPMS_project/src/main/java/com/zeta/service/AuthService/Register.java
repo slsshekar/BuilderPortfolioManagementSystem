@@ -18,11 +18,8 @@ public class Register {
 
     public boolean register(String username, String password, ROLE role)
             throws RoleMismatchException {
-
-        // load users from DAO
         Map<String, User> userList = userDAO.load();
 
-        // validate inputs
         Utility.validateInput(username, "Username");
         Utility.validateInput(password, "Password");
 
@@ -30,12 +27,9 @@ public class Register {
             throw new IllegalArgumentException("Role cannot be null");
         }
 
-        // check duplicate username
         if (userList.containsKey(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
-
-        // create user based on role
         User user = switch (role) {
             case MANAGER -> new Manager(username, password, role);
             case BUILDER -> new Builder(username, password, role);
@@ -43,7 +37,6 @@ public class Register {
             default -> throw new RoleMismatchException(role + " does not match any roles");
         };
 
-        // save user
         userList.put(username, user);
         userDAO.save(userList);
 

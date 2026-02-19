@@ -13,15 +13,10 @@ import java.util.Scanner;
 
 public class LoginUI {
 
-    // create mapper once
-    private static final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    private static final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    // DAO layer
     private static final UserDAO userDAO = new UserDAO(mapper);
 
-    // service layer
     private static final Login loginService = new Login(userDAO);
 
     public static void show(Scanner scanner) {
