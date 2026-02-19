@@ -3,6 +3,7 @@ package com.zeta.service.utility;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Utility {
@@ -10,6 +11,13 @@ public class Utility {
     public static void validateInput(String input, String fieldName) {
         if (input == null || input.isBlank()) {
             throw new IllegalArgumentException(fieldName + " cannot be blank");
+        }
+        if (!"Password".equals(fieldName) && !Character.isLetter(input.charAt(0))) {
+            throw new IllegalArgumentException(fieldName + " must start with a letter");
+        }
+
+        if (input.length() < 3 ) {
+            throw new IllegalArgumentException("Fieldname should have atleast 3 characters");
         }
     }
 
