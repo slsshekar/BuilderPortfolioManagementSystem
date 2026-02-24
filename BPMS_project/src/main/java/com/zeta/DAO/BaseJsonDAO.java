@@ -47,7 +47,7 @@ public abstract class BaseJsonDAO<T> {
 
     public void save(Map<String, T> data) {
 
-        path.toFile().getParentFile().mkdirs();
+        System.out.println("======="+path.toFile().getParentFile().mkdirs());
 
         try (RandomAccessFile file = new RandomAccessFile(path.toFile(), "rw");
              FileChannel channel = file.getChannel();
