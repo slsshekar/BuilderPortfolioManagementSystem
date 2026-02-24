@@ -1,5 +1,7 @@
 package com.zeta.service.utility;
 
+import com.zeta.logging.Logger;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,6 +9,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Utility {
+    static Logger logger = Logger.getInstance();
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static void validateInput(String input, String fieldName) {
@@ -34,9 +37,15 @@ public class Utility {
         System.out.print(prompt);
         String dateStr = scanner.nextLine().trim();
         try {
+            LocalDate date = LocalDate.parse(dateStr, DATE_FORMAT);
+            if (date.isBefore(LocalDate.now())) {
+                logger.warn("Date cannot be in the past. Please enter today or a future date.");
+                return null;
+            }
             return LocalDate.parse(dateStr, DATE_FORMAT);
+
         } catch (DateTimeParseException e) {
-            System.out.println("Invalid date format. Please use dd-MM-yyyy (e.g. 15-03-2026)");
+            logger.warn("Invalid date format. Please use dd-MM-yyyy (e.g. 15-03-2026)");
             return null;
         }
     }

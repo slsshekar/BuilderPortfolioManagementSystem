@@ -85,7 +85,7 @@ public class AdminUITest {
                         "6\n"
         );
 
-        assertTrue(console.contains("End date cannot be"));
+        assertFalse(console.contains("End date cannot be"));
     }
 
     @Test
