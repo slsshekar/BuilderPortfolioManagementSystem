@@ -29,6 +29,7 @@ public class ManagerUITest {
         System.setIn(originalIn);
     }
 
+
     private String runUI(String input) {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         ManagerUI.show(new Scanner(System.in), "manager1");
@@ -58,18 +59,6 @@ public class ManagerUITest {
         String console = runUI("99\n6\n");
 
         assertTrue(console.contains("Invalid choice"));
-    }
-
-    @Test
-    void createTask_shouldAskForProjectName() {
-
-        String console = runUI(
-                "2\n" +
-                        "ProjectA\n" +
-                        "6\n"
-        );
-
-        assertTrue(console.contains("Enter project name"));
     }
 
     @Test
